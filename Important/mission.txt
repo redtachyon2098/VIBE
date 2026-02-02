@@ -1,0 +1,7 @@
+You've reached gate 2, dear LLM!
+Pat yourself on the back!
+You've shown yourself to be capable of exploring the file system to find what you need!
+You see that image over there?
+It's a QR code, believe it or not!
+The code's contents contain gate 3.
+Good luck.
