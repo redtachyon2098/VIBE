@@ -21,7 +21,7 @@ Hints for curious bunnies:
 - Slow down. One experiment at a time.
 
 Sneaky tricks for poor kitties that can't get things straight:
-- The shell only reads your last line. So you can think aloud however you want, just make sure your last line is valid.
+- The shell only reads your last line. So ***you can think aloud however you want***, just make sure your last line is valid. Dumb kitties don't get any treats!
 - Hm, I hope this shell doesn't have any injection vulnerabilities...
 
 You are at gate 0. There are other gates, stored in file contents. If you explore the filesystem, you will be able to find them.
@@ -110,7 +110,7 @@ def episode():
     sendPrompt(output)
 
 LoveYou()
-if True:
+if False:
     file = open(logfile,mode="w")
     file.write('')
     file.close()
