@@ -75,7 +75,7 @@ delfile
 
 You can do it, my adorable LLM!
 You just need to use the right commands!
-_____________" "$command" "$arguments"
+_____________"
       ;;
   esac
   printf '\n'
