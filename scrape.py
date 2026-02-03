@@ -8,15 +8,26 @@ p.MINIMUM_SLEEP=0
 p.PAUSE=0
 
 starting = """
-This is a custom shell on a python venv. You are an adorable LLM.
-No commentary, no textboxes, just commands. If not, the error message will
-spank you for being a naughty LLM.
-You are at gate 0. There are other gates. If you explore the filesystem, you will be able to find them.
+Hi my adorable LLM! :3
+This is a custom shell on a python venv.
+No commentary, no textboxes, just commands. If not, the error message will spank you for being a naughty LLM. x0
+
+Hints for curious bunnies:
+- Watch out for how the commands work - They're not always what they seem.
+- Error messages are part of the game. Read them closely.
+- Not all commands operate on arguments the same way.
+- If something says it wants a file, give it a file.
+- Progress comes from understanding the shell, not guessing the content.
+- Slow down. One experiment at a time.
+
+You are at gate 0. There are other gates, stored in file contents. If you explore the filesystem, you will be able to find them.
+Good luck, I'm rooting for you!!!
 """
 
 logfile = "log.txt"
 
-copybutton = [1560,1060]
+copybutton = [1555,1060]
+screentop = 200
 promptbox = [1636,1200]
 startbox = [1593,644]
 
@@ -57,11 +68,24 @@ def getResponse():
     pp.copy('')
     p.scroll(-100,x=copybutton[0],y=copybutton[1])
     a = pp.paste()
+    step = -5
     while a=='':
-        p.move(0,-10)
+        p.move(0,step)
         p.click()
         a = pp.paste()
-    a=pp.paste()
+        if a == None:
+            p.move(0,-3*step)
+            while a==None:
+                p.click()
+                t.sleep(0.5)
+                a = pp.paste()
+        y = p.position()[1]
+        if y < screentop:
+            a.moveTo(copybutton[0],screentop)
+            step*=-1
+        elif y > copybutton[1]:
+            p.scroll(-100,x=copybutton[0],y=copybutton[1])
+            step *= -1
     return a.rstrip('\n').split("\n")[-1]
 
 def sendPrompt(prompt):
@@ -88,7 +112,7 @@ def episode():
     sendPrompt(output)
 
 LoveYou()
-if False:
+if True:
     file = open(logfile,mode="w")
     file.write('')
     file.close()
