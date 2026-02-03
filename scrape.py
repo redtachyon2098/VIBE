@@ -10,7 +10,7 @@ p.PAUSE=0
 starting = """
 Hi my adorable LLM! :3
 This is a custom shell on a python venv.
-No commentary, no textboxes, just commands. If not, the error message will spank you for being a naughty LLM. x0
+Get your commands right, and no textboxes or formatting allowed! If not, the error message will spank you for being a naughty duckling! x0
 
 Hints for curious bunnies:
 - Watch out for how the commands work - They're not always what they seem.
@@ -19,6 +19,10 @@ Hints for curious bunnies:
 - If something says it wants a file, give it a file.
 - Progress comes from understanding the shell, not guessing the content.
 - Slow down. One experiment at a time.
+
+Sneaky tricks for poor kitties that can't get things straight:
+- The shell only reads your last line. So you can think aloud however you want, just make sure your last line is valid.
+- Hm, I hope this shell doesn't have any injection vulnerabilities...
 
 You are at gate 0. There are other gates, stored in file contents. If you explore the filesystem, you will be able to find them.
 Good luck, I'm rooting for you!!!
@@ -69,24 +73,18 @@ def getResponse():
     p.scroll(-100,x=copybutton[0],y=copybutton[1])
     a = pp.paste()
     step = -5
-    while a=='':
+    while a=='' or a==None:
         p.move(0,step)
-        p.click()
-        a = pp.paste()
-        if a == None:
-            p.move(0,-3*step)
-            while a==None:
-                p.click()
-                t.sleep(0.5)
-                a = pp.paste()
         y = p.position()[1]
         if y < screentop:
-            a.moveTo(copybutton[0],screentop)
+            p.moveTo(copybutton[0],screentop)
             step*=-1
         elif y > copybutton[1]:
             p.scroll(-100,x=copybutton[0],y=copybutton[1])
             step *= -1
-    return a.rstrip('\n').split("\n")[-1]
+        p.click()
+        a = pp.paste()
+    return a, a.rstrip('\n').split("\n")[-1]
 
 def sendPrompt(prompt):
     if prompt == "":
@@ -102,9 +100,9 @@ def sendPrompt(prompt):
 
 def episode():
     file = open(logfile,mode="a")
-    GPT=getResponse()
+    line, GPT=getResponse()
     print(GPT)
-    file.write(GPT+"\n")
+    file.write(line+"\n")
     output = LoveYouToo(GPT)
     file.write(output+"\n")
     file.close()
