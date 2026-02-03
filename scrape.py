@@ -19,6 +19,7 @@ startbox = [1593,644]
 writecooldown = 10
 readcooldown = 4
 
+
 proc = s.Popen(
     ["bash", "loveyou.sh"],
     cwd="VIBE",
@@ -48,8 +49,6 @@ def LoveYouToo(command):
     proc.stdin.flush()
     return love
 
-LoveYou()
-
 def getResponse():
     pp.copy('')
     p.scroll(-100,x=copybutton[0],y=copybutton[1])
@@ -58,10 +57,13 @@ def getResponse():
         p.move(0,-10)
         p.click()
         a = pp.paste()
-    return a
+    return a.rstrip('\n').split("\n")[-1]
 
 def sendPrompt(prompt):
-    pp.copy(prompt)
+    if prompt == "":
+        pp.copy("[no output]")
+    else:
+        pp.copy(prompt)
     p.click(x=promptbox[0],y=promptbox[1])
     p.click(x=promptbox[0],y=promptbox[1])
     p.hotkey("command","v")
@@ -70,14 +72,15 @@ def sendPrompt(prompt):
 def episode():
     file = open(logfile,mode="a")
     GPT=getResponse()
+    print(GPT)
     file.write(GPT+"\n")
-    output = LoveYouToo(GPT.strip())
+    output = LoveYouToo(GPT)
     file.write(output+"\n")
     file.close()
     t.sleep(readcooldown)
     sendPrompt(output)
-    print(GPT)
 
+LoveYou()
 if True:
     file = open(logfile,mode="w")
     file.write('')
