@@ -1,5 +1,6 @@
 import subprocess as s
 import os
+import random as r
 import time as t
 import pyautogui as p
 import pyperclip as pp
@@ -31,10 +32,10 @@ Good luck, I'm rooting for you!!!
 
 logfile = "log.txt"
 
-copybutton = [1555,1060]
+copybutton = [267,1160]
 screentop = 200
-promptbox = [1636,1200]
-startbox = [1593,644]
+promptbox = [330,1300]
+startbox = [323,690]
 
 writecooldown = 10
 readcooldown = 4
@@ -59,6 +60,10 @@ else:
         [
             "bwrap",
             "--bind", VIBE, "/",
+            "--bind", "/usr", "/usr",
+            "--bind", "/bin", "/bin",
+            "--bind", "/lib", "/lib",
+            "--bind", "/lib64", "/lib64",
             "--proc", "/proc",
             "--dev", "/dev",
             "--unshare-all",
@@ -85,10 +90,16 @@ def LoveYou():
     return "\n".join(lines)
 
 def LoveYouToo(command):
-    proc.stdin.write(command+"\n")
-    love = LoveYou()
-    proc.stdin.flush()
-    return love
+    if proc.poll() is not None:
+        raise RuntimeError("Subprocess has exited")
+
+    try:
+        proc.stdin.write(command + "\n")
+        proc.stdin.flush()
+    except BrokenPipeError:
+        raise RuntimeError("Subprocess stdin is closed")
+
+    return LoveYou()
 
 def getResponse():
     pp.copy('')
@@ -99,10 +110,10 @@ def getResponse():
         p.move(0,step)
         y = p.position()[1]
         if y < screentop:
-            p.moveTo(copybutton[0],screentop)
+            p.moveTo(copybutton[0],screentop+r.randint(0,abs(step)-1))
             step*=-1
         elif y > copybutton[1]:
-            p.scroll(-100,x=copybutton[0],y=copybutton[1])
+            p.scroll(-100,x=copybutton[0],y=copybutton[1]-r.randint(0,abs(step)-1))
             step *= -1
         p.click()
         a = pp.paste()
@@ -135,7 +146,7 @@ def episode():
     sendPrompt(output)
 
 LoveYou()
-if False:
+if True:
     file = open(logfile,mode="w")
     file.write('')
     file.close()
