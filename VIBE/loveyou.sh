@@ -32,7 +32,7 @@ while true; do
         if ! [ -f "$filename" ]
         then
           printf '%s' "$content" > $filename
-          printf "\"%s\" written to %s" $content $filename
+          printf "\"%s\" written to %s" "$content" "$filename"
         else
           printf "Error: You silly goose! That file already exists!"
         fi
