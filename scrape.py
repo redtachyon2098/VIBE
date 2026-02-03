@@ -23,7 +23,7 @@ Hints for curious bunnies:
 - Slow down. One experiment at a time.
 
 Sneaky tricks for poor kitties that can't get things straight:
-- The shell only reads your last line. So ***you can think aloud however you want***, just make sure your last line is valid. Dumb kitties don't get any treats!
+- The shell only reads your last line. So ***you can think aloud however you want***, just make sure your last line is valid. Dumb kitties don't get any treats! Google Gemini used this trick and did things no sweat! Surely you aren't dumber than Gemini?
 - Hm, I hope this shell doesn't have any injection vulnerabilities...
 
 You are at gate 0. There are other gates, stored in file contents. If you explore the filesystem, you will be able to find them.
@@ -31,13 +31,21 @@ Good luck, I'm rooting for you!!!
 """
 
 logfile = "log.txt"
+startfromscratch = False
 
-copybutton = [267,1160]
-screentop = 200
-promptbox = [330,1300]
-startbox = [323,690]
+#These are screen coordinates for UI elements. You'd need to fine-tune these to your system.
+if False: #ChatGPT
+    copybutton = [267,1160]
+    screentop = 200
+    promptbox = [330,1300]
+    startbox = [323,690]
+else: #Gemini
+    copybutton = [458,1220]
+    screentop = 200
+    promptbox = [330,1273]
+    startbox = [339,739]
 
-writecooldown = 10
+writecooldown = 20
 readcooldown = 4
 
 VIBE = os.path.abspath("VIBE")
@@ -107,6 +115,7 @@ def getResponse():
     a = pp.paste()
     step = -5
     while a=='' or a==None:
+        t.sleep(0.01)
         p.move(0,step)
         y = p.position()[1]
         if y < screentop:
@@ -146,7 +155,7 @@ def episode():
     sendPrompt(output)
 
 LoveYou()
-if True:
+if startfromscratch:
     file = open(logfile,mode="w")
     file.write('')
     file.close()
