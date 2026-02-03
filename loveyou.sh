@@ -78,4 +78,5 @@ You just need to use the right commands!
 _____________" "$command" "$arguments"
       ;;
   esac
+  printf '\n'
 done
