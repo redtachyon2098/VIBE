@@ -3,6 +3,10 @@ import time as t
 import pyautogui as p
 import pyperclip as pp
 
+p.MINIMUM_DURATION=0
+p.MINIMUM_SLEEP=0
+p.PAUSE=0
+
 starting = """
 This is a custom shell on a python venv. You are an adorable LLM.
 No commentary, no textboxes, just commands. If not, the error message will
@@ -57,6 +61,7 @@ def getResponse():
         p.move(0,-10)
         p.click()
         a = pp.paste()
+    a=pp.paste()
     return a.rstrip('\n').split("\n")[-1]
 
 def sendPrompt(prompt):
@@ -66,7 +71,9 @@ def sendPrompt(prompt):
         pp.copy(prompt)
     p.click(x=promptbox[0],y=promptbox[1])
     p.click(x=promptbox[0],y=promptbox[1])
+    t.sleep(0.1)
     p.hotkey("command","v")
+    t.sleep(0.1)
     p.press('enter')
 
 def episode():
@@ -81,7 +88,7 @@ def episode():
     sendPrompt(output)
 
 LoveYou()
-if True:
+if False:
     file = open(logfile,mode="w")
     file.write('')
     file.close()
