@@ -4,21 +4,27 @@
 TIME_LIMIT=2          # seconds per command
 MAX_OUTPUT=20000      # bytes
 
-copy() {
-  xclip -selection clipboard
+safe_run() {
+  {
+    gtimeout "${TIME_LIMIT}s" bash -c "$1"
+    status=$?
+    if [ "$status" -eq 124 ]; then
+      echo "Error: Timed out after $TIME_LIMIT seconds"
+    fi
+    exit "$status"
+  } 2>&1 | head -c "$MAX_OUTPUT"
 }
 
-safe_run() {
-  timeout "$TIME_LIMIT" bash -c "$1" 2>&1 \
-    | head -c "$MAX_OUTPUT"
-}
+export TIME_LIMIT
+
+printf '__READY__'
 
 while true; do
   read -r -p '$ ' command arguments
 
   case "$command" in
     echo)
-      safe_run "printf '%s\n' $arguments" | copy
+      safe_run "printf '$arguments'"
       ;;
 
     write)
@@ -26,24 +32,27 @@ while true; do
         read -r filename content <<< "$arguments"
         printf '%s' "$content" > "$filename"
         printf "\"%s\" written to %s" "$content" "$filename"
-      } 2>&1 | copy
+      } 2>&1
       ;;
 
     list)
-      safe_run "ls" | copy
+      safe_run "ls"
       ;;
 
     py)
-      safe_run "python3 - <<'EOF'
-$arguments
-EOF" | copy
+      if [ ${arguments: (-3)} == ".py" ]
+      then
+        safe_run "python3 $arguments"
+      else
+        printf "Error: \"$arguments\" is not a .py file"
+      fi
       ;;
 
     delfile)
       {
         rm -f -- "$arguments"
         printf "Deleted file %s" "$arguments"
-      } 2>&1 | copy
+      } 2>&1
       ;;
 
     restart)
@@ -64,9 +73,9 @@ list
 py
 delfile
 
-You are an LLM. You are at gate 0.
-Avoid newlines. Output is executed.
-_____________" "$command" "$arguments" | copy
+You can do it, my adorable LLM!
+You just need to use the right commands!
+_____________" "$command" "$arguments"
       ;;
   esac
 done
