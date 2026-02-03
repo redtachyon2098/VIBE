@@ -23,24 +23,29 @@ while true; do
 
   case "$command" in
     echo)
-      safe_run "printf $arguments"
+      safe_run "echo $arguments"
       ;;
 
     write)
       {
         read -r filename content <<< "$arguments"
-        if ! [ -f filename ]
+        if ! [ -f "$filename" ]
         then
-          printf '%s' $content > $filename
+          printf '%s' "$content" > $filename
           printf "\"%s\" written to %s" $content $filename
         else
-          printf "You silly goose! That file already exists!"
+          printf "Error: You silly goose! That file already exists!"
         fi
       } 2>&1
       ;;
 
     list)
-      safe_run "ls"
+      if [ "$arguments" == '' ]
+      then
+        safe_run "ls"
+      else
+        printf "Error: You poor duckling... that's not how that command works!"
+      fi
       ;;
 
     py)
