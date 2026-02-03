@@ -1,4 +1,5 @@
 import subprocess as s
+import os
 import time as t
 import pyautogui as p
 import pyperclip as pp
@@ -38,17 +39,38 @@ startbox = [1593,644]
 writecooldown = 10
 readcooldown = 4
 
+VIBE = os.path.abspath("VIBE")
 
-proc = s.Popen(
-    ["bash", "loveyou.sh"],
-    cwd="VIBE",
-    stdin=s.PIPE,
-    stdout=s.PIPE,
-    stderr=s.STDOUT,
-    text=True,
-    bufsize=1,
-    universal_newlines=True
-)
+LINUX=True
+
+if not LINUX:
+    proc = s.Popen(
+        ["bash", "loveyou.sh"],
+        cwd="VIBE",
+        stdin=s.PIPE,
+        stdout=s.PIPE,
+        stderr=s.STDOUT,
+        text=True,
+        bufsize=1,
+        universal_newlines=True
+    )
+else:
+    proc = s.Popen(
+        [
+            "bwrap",
+            "--bind", VIBE, "/",
+            "--proc", "/proc",
+            "--dev", "/dev",
+            "--unshare-all",
+            "--die-with-parent",
+            "bash", "/loveyou.sh",
+        ],
+        stdin=s.PIPE,
+        stdout=s.PIPE,
+        stderr=s.STDOUT,
+        text=True,
+        bufsize=1,
+    )
 
 def LoveYou():
     lines = []
@@ -94,7 +116,10 @@ def sendPrompt(prompt):
     p.click(x=promptbox[0],y=promptbox[1])
     p.click(x=promptbox[0],y=promptbox[1])
     t.sleep(0.1)
-    p.hotkey("command","v")
+    if LINUX:
+        p.hotkey("ctrl","v")
+    else:
+        p.hotkey("command","v")
     t.sleep(0.1)
     p.press('enter')
 
