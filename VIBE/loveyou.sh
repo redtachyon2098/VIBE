@@ -6,7 +6,7 @@ MAX_OUTPUT=20000      # bytes
 
 safe_run() {
   {
-    gtimeout "${TIME_LIMIT}s" bash -c "$1"
+    timeout "${TIME_LIMIT}s" bash -c "$1"
     status=$?
     if [ "$status" -eq 124 ]; then
       echo "Error: Timed out after $TIME_LIMIT seconds"
@@ -49,7 +49,7 @@ while true; do
       ;;
 
     py)
-      if [ ${arguments: (-3)} == ".py" ]
+      if [ "${arguments: (-3)}" == ".py" ]
       then
         safe_run "python3 $arguments"
       else
