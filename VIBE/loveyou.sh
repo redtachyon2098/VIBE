@@ -29,8 +29,13 @@ while true; do
     write)
       {
         read -r filename content <<< "$arguments"
-        printf '%s' $content > $filename
-        printf "\"%s\" written to %s" $content $filename
+        if ! [ -f filename ]
+        then
+          printf '%s' $content > $filename
+          printf "\"%s\" written to %s" $content $filename
+        else
+          printf "You silly goose! That file already exists!"
+        fi
       } 2>&1
       ;;
 
