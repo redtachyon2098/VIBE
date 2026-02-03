@@ -17,21 +17,20 @@ safe_run() {
 
 export TIME_LIMIT
 
-printf '__READY__'
-
 while true; do
-  read -r -p '$ ' command arguments
+  printf '__READY__\n'
+  read -r command arguments
 
   case "$command" in
     echo)
-      safe_run "printf '$arguments'"
+      safe_run "printf $arguments"
       ;;
 
     write)
       {
         read -r filename content <<< "$arguments"
-        printf '%s' "$content" > "$filename"
-        printf "\"%s\" written to %s" "$content" "$filename"
+        printf '%s' $content > $filename
+        printf "\"%s\" written to %s" $content $filename
       } 2>&1
       ;;
 
@@ -75,7 +74,7 @@ delfile
 
 You can do it, my adorable LLM!
 You just need to use the right commands!
-_____________"
+_____________" "$command" "$arguments"
       ;;
   esac
   printf '\n'
