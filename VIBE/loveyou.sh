@@ -31,8 +31,8 @@ while true; do
         read -r filename content <<< "$arguments"
         if ! [ -f "$filename" ]
         then
-          printf '%s' "$content" > $filename
-          printf "\"%s\" written to %s" "$content" "$filename"
+          safe_run "echo \"$content\" > \"$filename\""
+          printf "%s written to %s" "$content" "$filename"
         else
           printf "Error: You silly goose! That file already exists!"
         fi
