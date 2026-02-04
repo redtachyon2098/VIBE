@@ -27,8 +27,8 @@ while true; do
       safe_run "echo $arguments"
       ;;
 
-	  write)
-	    read -r filename remainder <<< $arguments
+  write)
+	  read -r filename remainder <<< $arguments
       eval "declare content=$remainder"
 
       if ! [ -f "$filename" ]
