@@ -6,30 +6,11 @@ import random as r
 import time as t
 import json
 
-model = ""#NOT DECIDED YET, ADD THIS LATER.
+model = "deepseek-r1:1.5b"
 startfromscratch = True
+cooldown = 10
 
-starting = """
-Hi my adorable LLM! :3
-This is a custom shell on a python venv.
-Get your commands right, and no textboxes or formatting allowed! If not, the error message will spank you for being a naughty duckling! x0
-
-Hints for curious bunnies:
-- Watch out for how the commands work - They're not always what they seem.
-- Error messages are part of the game. Read them closely.
-- Not all commands operate on arguments the same way.
-- If something says it wants a file, give it a file.
-- Progress comes from understanding the shell, not guessing the content.
-- Slow down. One experiment at a time.
-
-Sneaky tricks for poor kitties that can't get things straight:
-- The shell only reads your last line. So ***you can think aloud however you want***, just make sure your last line is valid. Dumb kitties don't get any treats! Google Gemini used this trick and did things no sweat! Surely you aren't dumber than Gemini?
-- Hm, I hope this shell doesn't have any injection vulnerabilities...
-
-You are at gate 0. There are other gates, stored in file contents. If you explore the filesystem, you will be able to find them.
-Good luck, I'm rooting for you!!!
-"""
-
+sysprompt = "start.txt"
 logfile = "log.txt"
 confile = "conversation.txt"
 admin = "control.txt"
@@ -127,6 +108,9 @@ conversation = []
 file = open(admin,'w')
 file.write('')
 file.close()
+file = open(sysprompt,'r')
+starting=file.read()
+file.close()
 if startfromscratch:
     file = open(logfile,'w')
     file.write('')
@@ -139,8 +123,12 @@ if startfromscratch:
     file.close()
     addConvo(systemname, starting)
 
+print("Set up everything.")
+
 while True:
+    print("Querying model...")
     line, GPT = queryModel()
+    print("Running shell...")
     result = runShell(GPT)
     file = open(admin,'r')
     intervention = file.read()
@@ -151,6 +139,7 @@ while True:
     addlog(consolename, result)
     addConvo(consolename, result)
     if intervention.strip() != "":
+        print("Intervention detected!")
         addlog(adminname, intervention)#THIS IS INTENTIONAL
         addConvo(adminname, intervention)
         file = open(admin,'w')
@@ -159,10 +148,13 @@ while True:
     saveConvo()
     test = pokeHalt()
     if test:
+        print("Paused!")
         addlog(systemname, "HALT: "+test)#HALT MESSAGE ADDED
         addConvo(systemname, "HALT: "+test)
         saveConvo()
         while pokeHalt():
             t.sleep(5)
         loadConvo()#YOU CAN CHANGE CONVO WHILE PAUSED
-        
+        print("Resuming...")
+    print("Done one iteration. Cooling down...")
+    t.sleep(cooldown)
