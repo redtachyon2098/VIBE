@@ -6,7 +6,7 @@ import json
 from modelwrapper import promptmodel
 
 startfromscratch = True
-cooldown = 10
+cooldown = 30
 
 sysprompt = "start.txt"
 logfile = "log.txt"
@@ -124,6 +124,7 @@ else:
 
 print("Set up everything.")
 
+clock = t.time()
 while True:
     test = pokeHalt()#HALT
     if test:
@@ -160,4 +161,5 @@ while True:
     addConvo(consolename, result)
     
     print("Done one iteration. Cooling down...")
-    t.sleep(cooldown)
+    t.sleep(max(0,cooldown+clock-t.time()))
+    clock = t.time()
