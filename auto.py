@@ -12,7 +12,7 @@ cooldown = 10
 
 sysprompt = "start.txt"
 logfile = "log.txt"
-confile = "conversation.txt"
+confile = "conversation.json"
 admin = "control.txt"
 halt = "halt.txt"
 systemname = "system"
