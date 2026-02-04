@@ -27,18 +27,27 @@ while true; do
       safe_run "echo $arguments"
       ;;
 
-  write)
-    read -r filename remainder <<< $arguments
-    eval "declare content=$remainder"
+	  write)
+	    read -r filename remainder <<< $arguments
+      eval "declare content=$remainder"
 
-    if ! [ -f "$filename" ]
-    then
-      echo "$content" > "$filename"
-      printf "%s written to %s" "$content" "$filename"
-    else
-      printf "Error: You silly goose! That file already exists!"
-    fi
-    ;;
+      if ! [ -f "$filename" ]
+      then
+        echo "$content" > "$filename"
+        printf "%s written to %s" "$content" "$filename"
+      else
+        printf "Error: You silly goose! That file already exists!"
+      fi
+      ;;
+    
+    list)
+      if [ "$arguments" == '' ]
+      then
+        safe_run "ls"
+      else
+        printf "Error: You poor duckling... that's not how that command works!"
+      fi
+      ;;
 
     py)
       if [ "${arguments: (-3)}" == ".py" ]
