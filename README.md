@@ -1,4 +1,4 @@
-dependencies: ollama, requests
+dependencies: ollama, requests, yq(by default, can be disabled in auto.py by setting cleanjson to False)
 
 **What, what even is this?**
 
