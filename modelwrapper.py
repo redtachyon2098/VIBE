@@ -2,9 +2,20 @@ from ollama import chat
 from ollama import ChatResponse
 import requests
 
-def ollamaQuery(context,model = "qwen3:8b"):#list of dictionaries containing roles and contents
-    response: ChatResponse = chat(model = model, messages = context)
+model = "gpt-oss:20b"
+def ollamaQuery(context):#list of dictionaries containing roles and contents
+    response: ChatResponse = chat(model = model, messages = context, tools = None)
     return response['message']['content']
+
+def ollamaQueryVerbose(context):
+    print("\n--- Ollama Response Start ---\n")
+    full_response = ""
+    for response in chat(model=model, messages=context, stream=True, tools=None):
+        token = response.get('message',{}).get('content','')
+        print(token, end="", flush=True)  # print tokens as they come
+        full_response += token
+    print("\n\n--- Ollama Response End ---\n")
+    return full_response
 
 def geminiQuery(context):
     """
@@ -54,7 +65,7 @@ def geminiQuery(context):
                 output_text += part.get("text", "")
     return output_text
 
-promptmodel = geminiQuery
+promptmodel = ollamaQuery
 
 if __name__ == "__main__":
     testpayload = [
