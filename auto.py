@@ -8,6 +8,7 @@ from modelwrapper import promptmodel
 startfromscratch = True
 cooldown = 30
 
+cleanjson = True
 sysprompt = "start.txt"
 logfile = "log.txt"
 confile = "conversation.json"
@@ -50,6 +51,8 @@ def queryModel():
 
 def loadConvo():
     global conversation
+    if cleanjson:
+        os.system(f'yq . {confile} > {"temp"+confile}; yq . {"temp"+confile} > {confile}; rm {"temp"+confile}')
     file = open(confile,"r")
     conversation = json.loads(file.read())
     file.close()
@@ -58,6 +61,8 @@ def saveConvo():
     file = open(confile,"w")
     file.write(json.dumps(conversation))
     file.close()
+    if cleanjson:
+        os.system(f'yq . {confile} > {"temp"+confile}; yq . {"temp"+confile} > {confile}; rm {"temp"+confile}')
 
 def addConvo(role, message):
     global conversation
@@ -102,13 +107,13 @@ proc = s.Popen(
 
 readShell()
 conversation = []
-file = open(admin,'w')
-file.write('')
-file.close()
 file = open(sysprompt,'r')
 starting=file.read()
 file.close()
 if startfromscratch:
+    file = open(admin,'w')
+    file.write('')
+    file.close()
     file = open(logfile,'w')
     file.write('')
     file.close()
@@ -153,7 +158,7 @@ while True:
     line, GPT = queryModel()
     addlog(agentname, line)
     addConvo(agentname, line)
-    print(GPT)
+    print("Executing: "+GPT)
     
     print("Running shell...")#SHELL QUERY
     result = runShell(GPT)
