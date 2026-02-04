@@ -3,8 +3,8 @@ import os
 import random as r
 import time as t
 import json
+from modelwrapper import promptmodel
 
-model = "qwen3:8b"
 startfromscratch = True
 cooldown = 10
 
@@ -43,11 +43,8 @@ def runShell(command):
         raise RuntimeError("Subprocess stdin is closed")
     return readShell()
 
-from ollama import chat
-from ollama import ChatResponse
 def queryModel():
-    response: ChatResponse = chat(model = model, messages = conversation)
-    line = response['message']['content']
+    line = promptmodel(conversation)
     GPT = line.strip().split('\n')[-1]
     return line, GPT
 
