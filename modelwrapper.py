@@ -50,7 +50,7 @@ def geminiQuery(context):
     context: list of dictionaries with "role" and "content", e.g.,
              [{"role": "user", "content": "Hello"}]
     """
-    key = "AIzaSyBCc8P5VmrfiAzKtEyIFUIHaO7m2muCcgU"
+    key = ""
     url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent"
     
     headers = {
