@@ -82,7 +82,7 @@ ____________________________
 This uses Ollama or whatever LLM querying method you want. The code that queries the model is in modelwrapper.py.
 
 Run `setup.sh` while you're cd'ed into the root directory. This will set up a Python virtual environment and install the dependencies.
-Once that's done, activate the virtual environment, and run `python3 auto.py`. This starts the main loop.
+Once that's done, activate the virtual environment by running `source bin/activate`, and run `python3 auto.py`. This starts the main loop.
 
 **Controls**
 
