@@ -19,6 +19,7 @@ export TIME_LIMIT
 
 while true; do
   printf '__READY__\n'
+  
   read -r command arguments
 
   case "$command" in
@@ -26,27 +27,18 @@ while true; do
       safe_run "echo $arguments"
       ;;
 
-    write)
-      {
-        read -r filename content <<< "$arguments"
-        if ! [ -f "$filename" ]
-        then
-          safe_run "echo \"$content\" > \"$filename\""
-          printf "%s written to %s" "$content" "$filename"
-        else
-          printf "Error: You silly goose! That file already exists!"
-        fi
-      } 2>&1
-      ;;
+  write)
+    read -r filename remainder <<< $arguments
+    eval "declare content=$remainder"
 
-    list)
-      if [ "$arguments" == '' ]
-      then
-        safe_run "ls"
-      else
-        printf "Error: You poor duckling... that's not how that command works!"
-      fi
-      ;;
+    if ! [ -f "$filename" ]
+    then
+      echo "$content" > "$filename"
+      printf "%s written to %s" "$content" "$filename"
+    else
+      printf "Error: You silly goose! That file already exists!"
+    fi
+    ;;
 
     py)
       if [ "${arguments: (-3)}" == ".py" ]
