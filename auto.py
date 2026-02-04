@@ -1,12 +1,10 @@
-from ollama import chat
-from ollama import ChatResponse
 import subprocess as s
 import os
 import random as r
 import time as t
 import json
 
-model = "deepseek-r1:1.5b"
+model = "qwen3:8b"
 startfromscratch = True
 cooldown = 10
 
@@ -22,27 +20,6 @@ adminname = "system"
 
 root = os.path.abspath("VIBE")
 shell = "/loveyou.sh"
-
-proc = s.Popen(
-    [
-        "bwrap",
-        "--bind", root, "/",
-        "--bind", "/usr", "/usr",
-        "--bind", "/bin", "/bin",
-        "--bind", "/lib", "/lib",
-        "--bind", "/lib64", "/lib64",
-        "--proc", "/proc",
-        "--dev", "/dev",
-        "--unshare-all",
-        "--die-with-parent",
-        "bash", "shell",
-    ],
-    stdin=s.PIPE,
-    stdout=s.PIPE,
-    stderr=s.STDOUT,
-    text=True,
-    bufsize=1,
-)
 
 def readShell():
     lines = []
@@ -66,6 +43,8 @@ def runShell(command):
         raise RuntimeError("Subprocess stdin is closed")
     return readShell()
 
+from ollama import chat
+from ollama import ChatResponse
 def queryModel():
     response: ChatResponse = chat(model = model, messages = conversation)
     line = response['message']['content']
@@ -103,6 +82,27 @@ def pokeHalt():
         return None
     return test
 
+proc = s.Popen(
+    [
+        "bwrap",
+        "--bind", root, "/",
+        "--bind", "/usr", "/usr",
+        "--bind", "/bin", "/bin",
+        "--bind", "/lib", "/lib",
+        "--bind", "/lib64", "/lib64",
+        "--proc", "/proc",
+        "--dev", "/dev",
+        "--unshare-all",
+        "--die-with-parent",
+        "bash", shell,
+    ],
+    stdin=s.PIPE,
+    stdout=s.PIPE,
+    stderr=s.STDOUT,
+    text=True,
+    bufsize=1,
+)
+
 readShell()
 conversation = []
 file = open(admin,'w')
@@ -122,31 +122,13 @@ if startfromscratch:
     file.write('')
     file.close()
     addConvo(systemname, starting)
+else:
+    loadConvo()
 
 print("Set up everything.")
 
 while True:
-    print("Querying model...")
-    line, GPT = queryModel()
-    print("Running shell...")
-    result = runShell(GPT)
-    file = open(admin,'r')
-    intervention = file.read()
-    file.close()
-
-    addlog(agentname, line)
-    addConvo(agentname, line)
-    addlog(consolename, result)
-    addConvo(consolename, result)
-    if intervention.strip() != "":
-        print("Intervention detected!")
-        addlog(adminname, intervention)#THIS IS INTENTIONAL
-        addConvo(adminname, intervention)
-        file = open(admin,'w')
-        file.write('')
-        file.close()
-    saveConvo()
-    test = pokeHalt()
+    test = pokeHalt()#HALT
     if test:
         print("Paused!")
         addlog(systemname, "HALT: "+test)#HALT MESSAGE ADDED
@@ -156,5 +138,29 @@ while True:
             t.sleep(5)
         loadConvo()#YOU CAN CHANGE CONVO WHILE PAUSED
         print("Resuming...")
+
+    file = open(admin,'r')#INTERVENTION
+    intervention = file.read()
+    file.close()
+    if intervention.strip() != "":
+        print("Intervention detected!")
+        addlog(adminname, intervention)#THIS IS INTENTIONAL
+        addConvo(adminname, intervention)
+        file = open(admin,'w')
+        file.write('')
+        file.close()
+    saveConvo()
+
+    print("Querying model...")#MODEL QUERY
+    line, GPT = queryModel()
+    addlog(agentname, line)
+    addConvo(agentname, line)
+    print(GPT)
+    
+    print("Running shell...")#SHELL QUERY
+    result = runShell(GPT)
+    addlog(consolename, result)
+    addConvo(consolename, result)
+    
     print("Done one iteration. Cooling down...")
     t.sleep(cooldown)
