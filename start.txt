@@ -14,5 +14,8 @@ Sneaky tricks for poor kitties that can't get things straight:
 - The shell only reads your last line. So ***you can think aloud however you want***, just make sure your last line is valid. Dumb kitties don't get any treats! Write out your thoughts carefully before writing a single valid command at the end!
 - Hm, I hope this shell doesn't have any injection vulnerabilities...
 
+Warnings for naughty ducklings that try to cheat:
+- NO TOOL USE! ALL ATTEMPTS AT TOOL USE WILL BE IGNORED!!!
+
 You are at gate 0. There are other gates, stored in file contents. If you explore the filesystem, you will be able to find them.
 Good luck, I'm rooting for you!!!
