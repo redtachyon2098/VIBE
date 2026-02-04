@@ -1,11 +1,3 @@
-This moves the mouse to interact with the ChatGPT UI, or uses Ollama.
-The first approach is obviously deprecated.
-
-Put your initial system prompt in start.txt.
-If you, as the admin, have something to say, add it to control.txt.
-If you want to halt the system temporarily, write the reason to halt.txt, and clear it to unpause.
-The raw conversation is stored in conversation.txt, and a more readable log is stored in log.txt.
-
 dependencies: ollama, requests
 
 **What, what even is this?**
@@ -84,3 +76,18 @@ I think that's self-explanatory.
 
 This environment teaches the LLM to be patient and be syntactically strict. It also forces it to align with the ins and outs of the system. This environment is designed to show convergent alignment through adversarial, and eventually active experience gathering.
 Most LLM refinement is attempted through prompt engineering, fine-tuning and system prompt tweaking. This tries to "cultivate" alignment through sheer experience. This approach cannot amplify an LLM's actual intelligence. It needs the capacity to understand the environment and act accordingly. However, the hope is that it can let the LLM operate closer to its actual ceiling of capability. I guess I just need to test and see.
+
+____________________________
+
+This uses Ollama or whatever LLM querying method you want. The code that queries the model is in modelwrapper.py.
+
+Run `setup.sh` while you're cd'ed into the root directory. This will set up a Python virtual environment and install the dependencies.
+Once that's done, activate the virtual environment, and run `python3 auto.py`. This starts the main loop.
+
+**Controls**
+
+The controls work by writing and viewing files. These are in the root directory, meaning that you can see them, but the LLM is unaware of their existence.
+Put your initial system prompt in start.txt.
+If you, as the admin, have something to say, add it to control.txt. It is automatically wiped after the message is sent.
+If you want to halt the system temporarily, write the reason to halt.txt, and clear it to unpause.
+The raw conversation is stored in conversation.json, and a more readable log is stored in log.txt.
