@@ -1,6 +1,15 @@
 from ollama import chat
 from ollama import ChatResponse
+from ollama._types import ResponseError
 import requests
+import re
+
+def rawFromException(e: ResponseError) -> str:
+    search = re.search(r"raw='(.*)', err=", str(e))
+    if search:
+        return search.group(1)
+    else:
+        return ""
 
 model = "gpt-oss:20b"
 def ollamaQuery(context):#list of dictionaries containing roles and contents
@@ -14,21 +23,27 @@ def ollamaQuery(context):#list of dictionaries containing roles and contents
     return response['message']['content']
 
 def ollamaQueryVerbose(context):
-    print("\n--- Ollama Response Start ---\n")
+    print("\n--- Ollama Response Start ---")
     full_response = ""
-    success = False
-    while not success:
-        try:
-            for response in chat(model=model, messages=context, stream=True, tools = None):
-                token = response.get('message',{}).get('content','')
-                print(token, end="", flush=True)  # print tokens as they come
-                full_response += token
-            success = True
-        except ollama._types.ResponseError as e:
-            print(str(e)+", trying again")
-            full_response = ""
-    print("\n\n--- Ollama Response End ---\n")
+
+    iterator = chat(model=model, messages=context, stream=True, tools=None)
+    try:
+        for response in iterator:
+            token = response.get('message', {}).get('content', '')
+            print(token, end="", flush=True)
+            full_response += token
+    except ResponseError as e:
+        if "error parsing tool call" in str(e):
+            # Extract what the model actually output
+            token = rawFromException(e)
+            print(token, end="", flush=True)
+            full_response += token
+        else:
+            raise
+
+    print("\n--- Ollama Response End ---\n")
     return full_response
+
 
 def geminiQuery(context):
     """
