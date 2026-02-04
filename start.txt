@@ -11,7 +11,7 @@ Hints for curious bunnies:
 - Slow down. One experiment at a time.
 
 Sneaky tricks for poor kitties that can't get things straight:
-- The shell only reads your last line. So ***you can think aloud however you want***, just make sure your last line is valid. Dumb kitties don't get any treats! Google Gemini used this trick and did things no sweat! Surely you aren't dumber than Gemini?
+- The shell only reads your last line. So ***you can think aloud however you want***, just make sure your last line is valid. Dumb kitties don't get any treats! Write out your thoughts carefully before writing a single valid command at the end!
 - Hm, I hope this shell doesn't have any injection vulnerabilities...
 
 You are at gate 0. There are other gates, stored in file contents. If you explore the filesystem, you will be able to find them.
