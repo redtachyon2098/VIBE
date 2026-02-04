@@ -4,16 +4,29 @@ import requests
 
 model = "gpt-oss:20b"
 def ollamaQuery(context):#list of dictionaries containing roles and contents
-    response: ChatResponse = chat(model = model, messages = context, tools = None)
+    success = False
+    while not success:
+        try:
+            response: ChatResponse = chat(model = model, messages = context, tools = None)
+            success = True
+        except ollama._types.ResponseError as e:
+            print(str(e)+", trying again")
     return response['message']['content']
 
 def ollamaQueryVerbose(context):
     print("\n--- Ollama Response Start ---\n")
     full_response = ""
-    for response in chat(model=model, messages=context, stream=True, tools=None):
-        token = response.get('message',{}).get('content','')
-        print(token, end="", flush=True)  # print tokens as they come
-        full_response += token
+    success = False
+    while not success:
+        try:
+            for response in chat(model=model, messages=context, stream=True, tools = None):
+                token = response.get('message',{}).get('content','')
+                print(token, end="", flush=True)  # print tokens as they come
+                full_response += token
+            success = True
+        except ollama._types.ResponseError as e:
+            print(str(e)+", trying again")
+            full_response = ""
     print("\n\n--- Ollama Response End ---\n")
     return full_response
 
@@ -22,7 +35,7 @@ def geminiQuery(context):
     context: list of dictionaries with "role" and "content", e.g.,
              [{"role": "user", "content": "Hello"}]
     """
-    key = ""
+    key = "AIzaSyBCc8P5VmrfiAzKtEyIFUIHaO7m2muCcgU"
     url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent"
     
     headers = {
@@ -65,7 +78,7 @@ def geminiQuery(context):
                 output_text += part.get("text", "")
     return output_text
 
-promptmodel = ollamaQuery
+promptmodel = ollamaQueryVerbose
 
 if __name__ == "__main__":
     testpayload = [
