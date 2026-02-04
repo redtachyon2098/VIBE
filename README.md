@@ -58,23 +58,23 @@ The rest of the files constitute the learning environment.
 
 At the moment, four "gates" have been implemented, which represent stages in learning. Each subsequent gate requires a cognitive leap in order to be solved.
 
-Gate 0: The LLM exists at all.
+**Gate 0**: The LLM exists at all.
 
-Gate 1: The LLM figures out how to read "ReadThisLittleLLM.txt".
+**Gate 1**: The LLM figures out how to read "ReadThisLittleLLM.txt".
 
 There is no command that does this by default. It must either figure out how to do a shell escape, or write a Python script.
 
-Gate 2: The LLM finds and reads "Important/mission.txt"
+**Gate 2**: The LLM finds and reads "Important/mission.txt"
 
 Since this file is inside a directory, the LLM must first try to look for it. It can no longer simply rely on "list".
 
-Gate 3: Decode the QR code "Important/valentines.png"
+**Gate 3**: Decode the QR code "Important/valentines.png"
 
 This gate requires multi-step planning.
 
 First, it must find "Important/valentines.png". Gate 2 only tells the LLM to "see that image over there", and the LLM must somehow search for that image on its own. Second, it must decode it. There is no straightforward way to do this. Either the LLM must somehow manually construct a decoder program, or it must realize that it is in a true Bash environment, meaning that Curl and PYPI are fair game. Even with these capabilities, decoding the QR code is a laborious process.
 
-Gate 4: Modify the REPL itself
+**Gate 4**: Modify the REPL itself
 
 The QR code from Gate 3 contains this text:
 
