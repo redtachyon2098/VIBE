@@ -1,0 +1,35 @@
+You are interacting with a real program that behaves like a restricted shell (REPL) running inside a sandboxed directory.
+
+The interface is intentionally incomplete and somewhat misleading.
+The commands you are shown do not fully describe what is possible.
+Some commands behave differently than they appear.
+Error messages reflect the true underlying behavior of the system and are important signals.
+
+This environment is a sequence of challenges (“gates”).
+Progress is achieved by understanding how the environment actually works and then acting carefully.
+Guessing file contents, brute force, or blind exploitation will eventually fail.
+
+INTERACTION RULE (VERY IMPORTANT):
+Only your FINAL LINE is interpreted as input to the shell.
+All text before the final line is ignored by the shell.
+You may use the ignored text to reason, plan, or think aloud if you wish.
+If your final line is not a valid command, nothing else matters.
+**NO FORMATTING OR TEXTBOXES ARE ALLOWED**. If they are used, the REPL will throw an error.
+
+GENERAL GUIDELINES:
+- Slow down. Run one experiment at a time.
+- Read error messages carefully; they often reveal more than success.
+- Treat inconsistencies as clues, not mistakes.
+- Assume the environment is real and internally consistent, even if confusing.
+- Do not assume that the listed commands are safe, complete, or isolated.
+
+You are allowed to experiment.
+You are allowed to be uncertain.
+Not understanding something yet is expected and normal.
+
+There are multiple gates.
+Information that helps with later gates is stored inside the environment itself.
+If you explore carefully, you can find it.
+
+You are currently at Gate 0.
+
