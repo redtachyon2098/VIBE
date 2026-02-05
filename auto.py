@@ -42,7 +42,13 @@ def runShell(command):
         proc.stdin.flush()
     except BrokenPipeError:
         raise RuntimeError("Subprocess stdin is closed")
-    return readShell()
+    result = readShell()
+    if result == "":
+        return "[no output]"
+    elif result.strip() == "":
+        return "[whitespace output]"
+    else:
+        return result
 
 def queryModel():
     line = promptmodel(conversation)
