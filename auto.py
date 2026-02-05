@@ -28,7 +28,7 @@ def readShell():
         line = proc.stdout.readline()
         if not line:
             break
-        line = line.decode("utf-8",errors="backslashreplace").rstrip("\n")
+        line = line.rstrip("\n")
         if line == "__READY__":
             break
         lines.append(line)
@@ -107,8 +107,10 @@ proc = s.Popen(
     stdin=s.PIPE,
     stdout=s.PIPE,
     stderr=s.STDOUT,
-    #text=True,
-    #bufsize=1,
+    text=True,
+    bufsize=1,
+    encoding="utf-8",
+    errors="replace"
 )
 
 readShell()
