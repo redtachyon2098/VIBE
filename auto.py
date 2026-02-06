@@ -100,7 +100,12 @@ proc = s.Popen(
         "--bind", "/lib64", "/lib64",
         "--proc", "/proc",
         "--dev", "/dev",
-        "--unshare-all",
+        "--unshare-user",
+        "--unshare-pid",
+        "--unshare-ipc",
+        "--unshare-uts",
+        "--share-net", #THE LLM HAS NETWORK ACCESS
+        "--ro-bind", "/etc/resolv.conf", "/etc/resolv.conf",
         "--die-with-parent",
         "bash", shell,
     ],
