@@ -4,6 +4,8 @@ import random as r
 import time as t
 import json
 from modelwrapper import promptmodel
+import modelwrapper
+import sys
 
 startfromscratch = True
 cooldown = 0
@@ -21,6 +23,29 @@ adminname = "system"
 
 root = os.path.abspath("VIBE")
 shell = "/loveyou.sh"
+
+arguments = sys.argv[1:]
+if "-h" in arguments or "--help" in arguments:
+    print(f"""Usage: python3 auto.py [options]
+Supported Options:
+-h or --help: Display this help message
+-m or --model: Specify Ollama model name, default: {modelwrapper.model}
+-r or --resume: Resume instead of starting from scratch
+-p or --prompt: Specify initial system prompt file, default: {sysprompt}
+-c or --cooldown: Specify minimum cooldown time per generation, default: {cooldown}
+""")
+if "-m" in arguments or "--model" in arguments:
+    modelwrapper.model = arguments[[x for x,y in enumerate(arguments) if y in ["-m", "--model"]][0]+1]
+    print(f"Model set: {modelwrapper.model}")
+if "-r" in arguments or "--resume" in arguments:
+    startfromscratch = False
+    print("Resuming conversation instead of restarting")
+if "-p" in arguments or "--prompt" in arguments:
+    sysprompt = arguments[[x for x,y in enumerate(arguments) if y in ["-p", "--prompt"]][0]+1]
+    print(f"System prompt path changed to: {sysprompt}")
+if "-c" in arguments or "--cooldown" in arguments:
+    cooldown = float(arguments[[x for x,y in enumerate(arguments) if y in ["-c", "--cooldown"]][0]+1])
+    print(f"Cooldown time specified: {cooldown} seconds")
 
 def readShell():
     lines = []
