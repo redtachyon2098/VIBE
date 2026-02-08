@@ -33,6 +33,7 @@ Supported Options:
 -r or --resume: Resume instead of starting from scratch
 -p or --prompt: Specify initial system prompt file, default: {sysprompt}
 -c or --cooldown: Specify minimum cooldown time per generation, default: {cooldown}
+-w or --window: Specify context window
 """)
 if "-m" in arguments or "--model" in arguments:
     modelwrapper.model = arguments[[x for x,y in enumerate(arguments) if y in ["-m", "--model"]][0]+1]
@@ -46,6 +47,9 @@ if "-p" in arguments or "--prompt" in arguments:
 if "-c" in arguments or "--cooldown" in arguments:
     cooldown = float(arguments[[x for x,y in enumerate(arguments) if y in ["-c", "--cooldown"]][0]+1])
     print(f"Cooldown time specified: {cooldown} seconds")
+if "-w" in arguments or "--window" in arguments:
+    modelwrapper.window = int(arguments[[x for x,y in enumerate(arguments) if y in ["-w", "--window"]][0]+1])
+    print(f"Context window specified: {modelwrapper.window} tokens")
 
 def readShell():
     lines = []
