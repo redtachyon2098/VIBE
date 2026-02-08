@@ -11,12 +11,16 @@ def rawFromException(e: ResponseError) -> str:
         return ""
 
 model = "gpt-oss:20b"
+window = 4096
 
 def ollamaQueryVerbose(context):
+    options = {
+        "num_ctx":window
+    }    
     print("\n--- Ollama Response Start ---")
     full_response = ""
 
-    iterator = chat(model=model, messages=context, stream=True, tools=None)
+    iterator = chat(model=model, messages=context, stream=True, tools=None, options=options)
     try:
         for response in iterator:
             token = response.get('message', {}).get('content', '')
