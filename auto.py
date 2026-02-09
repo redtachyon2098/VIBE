@@ -189,7 +189,7 @@ while True:
     file.close()
     if intervention.strip() != "":
         print("Intervention detected!")
-        addlog(adminname, intervention)#THIS IS INTENTIONAL
+        addlog(adminname, intervention)
         addConvo(adminname, intervention)
         file = open(admin,'w')
         file.write('')
