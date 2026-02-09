@@ -24,8 +24,10 @@ adminname = "user"
 root = os.path.abspath("VIBE")
 shell = "/loveyou.sh"
 
+run = True
 arguments = sys.argv[1:]
 if "-h" in arguments or "--help" in arguments:
+    run = False
     print(f"""Usage: python3 auto.py [options]
 Supported Options:
 -h or --help: Display this help message
@@ -119,7 +121,7 @@ def pokeHalt():
         return None
     return test
 
-if __name__ == "__main__":
+if __name__ == "__main__" and run:
     proc = s.Popen(
         [
             "bwrap",
