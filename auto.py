@@ -19,7 +19,7 @@ halt = "halt.txt"
 systemname = "system"
 agentname = "assistant"
 consolename = "user"
-adminname = "system"
+adminname = "user"
 
 root = os.path.abspath("VIBE")
 shell = "/loveyou.sh"
