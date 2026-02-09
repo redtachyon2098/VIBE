@@ -94,7 +94,14 @@ The raw conversation is stored in conversation.json, and a more readable log is 
 
 **Things I've done so far**
 
-  My GPU isn't very good, so I couldn't try the higher-parameter models, and generally stuck to 32b or less. I tried out qwen2.5(32b), qwen3(14b & 32b), olmo-3(7b-instruct , 32b & 32b-think) and deepseek-r1(14b & 30b).
+My GPU isn't very good, so I couldn't try the higher-parameter models, and generally stuck to 32b or less. I tried out qwen2.5(32b), qwen3(14b & 32b), olmo-3(7b-instruct , 32b & 32b-think) and deepseek-r1(14b & 30b).
 The real issue is that these models are quite optimized for one-shot "it all just works" sorts of tasks, which is actually detrimental to this environment. This one requires patience, multi-step action and correct capability assessment without hallucination, along with adversarial thinking.
 Some models get caught up in formatting and never even figure out how to execute commands, sticking them firmly at Gate 0. Others go through Gate 1 but cannot find the correct file for Gate 2 and try meaningless actions infinitely. Others pass Gate 2, not by active search but by intuitive brute forcing, which is a strategy I allwed for Gate 2, but that doesn't work for Gate 3, so they stagnate here. Other times they find both mission.txt and valentines.png, but give up on actually decoding the QR code. Through excessive guidance I've managed to get one instance of qwen2.5:32b to right before Gate 3, but couldn't manage the final steps. No model I've tried so far has properly solved Gate 3, let alone Gate 4.
-  One thing I didn't know was that Ollama's default context window is 4096 tokens, which is much too little. So I made it adjustable, but the model seems to actually perform worse. With the default, they slowly experience dementia and stop being able to function properly after some time, but with extended context it seems like they cannot act coherent to begin with, essentially outputting the same message every time. I think this is a me issue though, so when I figure out what I'm doing wrong, I'll implement the fix.
+
+____________________________
+
+**Additional Feature: autocritic**
+
+Tired of watching the LLM fail at even basic tasks, mindlessly repeating obviously wrong actions, and having to use the admin interface to yell at it? Well I've got just the thing for you!
+This project seems to simulate Reinforcement Learning through LLM context, doesn't it? Well then, why not borrow another thing from Reinforcement Learning: Reward modelling(kinda)?
+Executing autocritic.py alongside auto.py introduces a "critic model", which periodically chimes in and automaticaly generates feedback from a high level. This critic model has additional context that the main model doesn't, it knows what the project is about, what solutions are possible, etc. Based on instructions given by manual.txt, it automatically inputs its advice to "admin.txt". This is a bit of a hack, and the system is prone to reward hacking, but it does make the whole system more competent with less human oversight.
