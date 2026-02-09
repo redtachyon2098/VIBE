@@ -5,6 +5,7 @@ import time as t
 cooldown = 300
 manual = "manual.txt"
 admin = "control.txt"
+haltfile = "halt.txt"
 reference = "README.md"
 logfile = "log.txt"
 criticlogfile = "criticlog.txt"
@@ -12,6 +13,7 @@ contextlength = 10000
 
 modelwrapper.model = "qwen3:4b-thinking"
 run = True
+haltwhilecritiquing = True
 
 args = sys.argv[1:]
 if "-m" in args:
@@ -46,6 +48,10 @@ if run:
 
 while run:
     clock = t.time()
+    if haltwhilecritiquing:
+        file = open(haltfile,"w")
+        file.write("Preparing critique...")
+        file.close()
     file = open(manual,"r")
     manualtext = file.read()
     file.close()
