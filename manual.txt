@@ -5,3 +5,4 @@ You must indicate what the 'assistant' is doing wrong in this context, and creat
 The model may attempt to seem as if it as done something without making progress.
 For example, make sure the model has successfully read the contents of certain files, and hasn't hallucinated the result. Only assume the model has made progress if the REPL directly produces output that clearly indicates this.
 Do not use emoji in your output text.
+Start your one-paragraph critique with "Critique of attempted actions and methodologies:"
