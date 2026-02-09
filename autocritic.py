@@ -7,10 +7,10 @@ manual = "manual.txt"
 admin = "control.txt"
 reference = "README.md"
 logfile = "log.txt"
-contextlength = 4000
+criticlogfile = "criticlog.txt"
+contextlength = 10000
 
 modelwrapper.model = "qwen3:4b-thinking"
-
 run = True
 
 args = sys.argv[1:]
@@ -39,6 +39,10 @@ Options:
 -h: Display this help message
 """)
 
+if run:
+    file = open(criticlogfile,"w")
+    file.write('')
+    file.close()
 
 while run:
     clock = t.time()
@@ -69,6 +73,9 @@ CODE OF CONDUCT:
     ]
     output = modelwrapper.promptmodel(query)
     file = open(admin,'w')
+    file.write(output)
+    file.close()
+    file = open(criticlog,'a')
     file.write(output)
     file.close()
     t.sleep(max(clock+cooldown-t.time(),0))
