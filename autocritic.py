@@ -13,7 +13,7 @@ contextlength = 10000
 
 modelwrapper.model = "qwen3:4b-thinking"
 run = True
-haltwhilecritiquing = True
+haltwhilecritiquing = False
 
 args = sys.argv[1:]
 if "-m" in args:
@@ -81,7 +81,7 @@ CODE OF CONDUCT:
     file = open(admin,'w')
     file.write(output)
     file.close()
-    file = open(criticlog,'a')
+    file = open(criticlogfile,'a')
     file.write(output)
     file.close()
     t.sleep(max(clock+cooldown-t.time(),0))
