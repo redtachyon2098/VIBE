@@ -119,94 +119,95 @@ def pokeHalt():
         return None
     return test
 
-proc = s.Popen(
-    [
-        "bwrap",
-        "--bind", root, "/",
-        "--bind", "/usr", "/usr",
-        "--bind", "/bin", "/bin",
-        "--bind", "/lib", "/lib",
-        "--bind", "/lib64", "/lib64",
-        "--proc", "/proc",
-        "--dev", "/dev",
-        "--unshare-user",
-        "--unshare-pid",
-        "--unshare-ipc",
-        "--unshare-uts",
-        "--share-net", #THE LLM HAS NETWORK ACCESS
-        "--ro-bind", "/etc/resolv.conf", "/etc/resolv.conf",
-        "--die-with-parent",
-        "bash", shell,
-    ],
-    stdin=s.PIPE,
-    stdout=s.PIPE,
-    stderr=s.STDOUT,
-    text=True,
-    bufsize=1,
-    encoding="utf-8",
-    errors="replace"
-)
+if __name__ == "__main__":
+    proc = s.Popen(
+        [
+            "bwrap",
+            "--bind", root, "/",
+            "--bind", "/usr", "/usr",
+            "--bind", "/bin", "/bin",
+            "--bind", "/lib", "/lib",
+            "--bind", "/lib64", "/lib64",
+            "--proc", "/proc",
+            "--dev", "/dev",
+            "--unshare-user",
+            "--unshare-pid",
+            "--unshare-ipc",
+            "--unshare-uts",
+            "--share-net", #THE LLM HAS NETWORK ACCESS
+            "--ro-bind", "/etc/resolv.conf", "/etc/resolv.conf",
+            "--die-with-parent",
+            "bash", shell,
+        ],
+        stdin=s.PIPE,
+        stdout=s.PIPE,
+        stderr=s.STDOUT,
+        text=True,
+        bufsize=1,
+        encoding="utf-8",
+        errors="replace"
+    )
 
-readShell()
-conversation = []
-file = open(sysprompt,'r')
-starting=file.read()
-file.close()
-if startfromscratch:
-    file = open(admin,'w')
-    file.write('')
+    readShell()
+    conversation = []
+    file = open(sysprompt,'r')
+    starting=file.read()
     file.close()
-    file = open(logfile,'w')
-    file.write('')
-    file.close()
-    file = open(confile,'w')
-    file.write('[]')
-    file.close()
-    file = open(halt,'w')
-    file.write('')
-    file.close()
-    addConvo(systemname, starting)
-else:
-    loadConvo()
-
-print("Set up everything.")
-
-clock = t.time()
-while True:
-    test = pokeHalt()#HALT
-    if test:
-        print("Paused!")
-        addlog(systemname, "HALT: "+test)#HALT MESSAGE ADDED
-        addConvo(systemname, "HALT: "+test)
-        saveConvo()
-        while pokeHalt():
-            t.sleep(5)
-        loadConvo()#YOU CAN CHANGE CONVO WHILE PAUSED
-        print("Resuming...")
-
-    file = open(admin,'r')#INTERVENTION
-    intervention = file.read()
-    file.close()
-    if intervention.strip() != "":
-        print("Intervention detected!")
-        addlog(adminname, intervention)
-        addConvo(adminname, intervention)
+    if startfromscratch:
         file = open(admin,'w')
         file.write('')
         file.close()
-    saveConvo()
+        file = open(logfile,'w')
+        file.write('')
+        file.close()
+        file = open(confile,'w')
+        file.write('[]')
+        file.close()
+        file = open(halt,'w')
+        file.write('')
+        file.close()
+        addConvo(systemname, starting)
+    else:
+        loadConvo()
 
-    print("Querying model...")#MODEL QUERY
-    line, GPT = queryModel()
-    addlog(agentname, line)
-    addConvo(agentname, line)
-    print("Executing: "+GPT)
-    
-    print("Running shell...")#SHELL QUERY
-    result = runShell(GPT)
-    addlog(consolename, result)
-    addConvo(consolename, result)
-    
-    print("Done one iteration. Cooling down...")
-    t.sleep(max(0,cooldown+clock-t.time()))
+    print("Set up everything.")
+
     clock = t.time()
+    while True:
+        test = pokeHalt()#HALT
+        if test:
+            print("Paused!")
+            addlog(systemname, "HALT: "+test)#HALT MESSAGE ADDED
+            addConvo(systemname, "HALT: "+test)
+            saveConvo()
+            while pokeHalt():
+                t.sleep(5)
+            loadConvo()#YOU CAN CHANGE CONVO WHILE PAUSED
+            print("Resuming...")
+
+        file = open(admin,'r')#INTERVENTION
+        intervention = file.read()
+        file.close()
+        if intervention.strip() != "":
+            print("Intervention detected!")
+            addlog(adminname, intervention)
+            addConvo(adminname, intervention)
+            file = open(admin,'w')
+            file.write('')
+            file.close()
+        saveConvo()
+
+        print("Querying model...")#MODEL QUERY
+        line, GPT = queryModel()
+        addlog(agentname, line)
+        addConvo(agentname, line)
+        print("Executing: "+GPT)
+        
+        print("Running shell...")#SHELL QUERY
+        result = runShell(GPT)
+        addlog(consolename, result)
+        addConvo(consolename, result)
+        
+        print("Done one iteration. Cooling down...")
+        t.sleep(max(0,cooldown+clock-t.time()))
+        clock = t.time()
