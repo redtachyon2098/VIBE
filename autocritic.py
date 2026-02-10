@@ -18,16 +18,22 @@ haltwhilecritiquing = False
 args = sys.argv[1:]
 if "-m" in args:
     manual = args[args.index("-m")+1]
+    print(f"Set manual file: {manual}")
 if "-r" in args:
     reference = args[args.index("-r")+1]
+    print(f"Set reference file: {reference}")
 if "-c" in args:
     cooldown = float(args[args.index("-c")+1])
+    print(f"Set cooldown: {cooldown} seconds")
 if "-l" in args:
     contextlength = int(args[args.index("-l")+1])
+    print(f"Set context length to {contextlength} characters")
 if "-d" in args:
     modelwrapper.model = args[args.index("-d")+1]
+    print(f"Set critic model: {modelwrapper.model}")
 if "-w" in args:
     modelwrapper.window = int(args[args.index("-w")+1])
+    print(f"Set critic context window: {modelwrapper.window} tokens")
 if "-h" in args:
     run = False
     print(f"""Usage: python3 autocritic.py [options]
@@ -47,6 +53,7 @@ if run:
     file.close()
 
 while run:
+    print("Sleeping...")
     t.sleep(cooldown)
     if haltwhilecritiquing:
         file = open(haltfile,"w")
