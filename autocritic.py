@@ -13,7 +13,7 @@ contextlength = 10000
 
 modelwrapper.model = "qwen3:4b-thinking"
 run = True
-haltwhilecritiquing = False
+haltwhilecritiquing = True
 
 args = sys.argv[1:]
 if "-m" in args:
