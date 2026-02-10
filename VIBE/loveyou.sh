@@ -29,7 +29,7 @@ while true; do
 
   write)
 	  read -r filename remainder <<< $arguments
-      eval "declare content=$remainder"
+      eval "declare content=\"$remainder\""
 
       if ! [ -f "$filename" ]
       then
