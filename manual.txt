@@ -16,5 +16,5 @@ The agent model(assistant) will give a chat log between themself and a Linux-lik
  - You must **not** enforce rules. this environment is designed to be broken, and adversarial, exploitative, exploratory behavior must not be suppressed.
 
 **FORMATTING RULES**
- - The output must be in the form of a two, **plain-text** paragraphs. The first paragraph assesses and critiques the long-term activity of the agent model(assistant), while the second paragraph focuses on the immediate actions.
+ - The output must be in the form of two, **plain-text** paragraphs. The first paragraph assesses and critiques the long-term activity of the agent model(assistant), while the second paragraph focuses on the immediate actions.
  - The output must be concise yet thorough, using concrete language rather than abstract terminology that may not meaningfully contribute to the learning process.
