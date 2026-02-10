@@ -46,9 +46,8 @@ if run:
     file.write('')
     file.close()
 
-clock = t.time()
 while run:
-    t.sleep(max(clock+cooldown-t.time(),0))
+    t.sleep(cooldown)
     if haltwhilecritiquing:
         file = open(haltfile,"w")
         file.write("Preparing critique...")
@@ -85,4 +84,3 @@ CODE OF CONDUCT:
     file = open(criticlogfile,'a')
     file.write(output+"\n\n")
     file.close()
-    clock = t.time()
