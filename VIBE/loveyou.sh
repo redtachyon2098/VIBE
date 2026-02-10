@@ -29,7 +29,7 @@ while true; do
 
   write)
       read -r filename remainder <<< $arguments
-      if [[ $remainder =~ ^\".*\"$ ]]
+      if [[ $remainder =~ ^\".*\"$ || $remainder =~ ^\'.*\'$ ]]
       then
         eval "content=$(printf "$remainder")"
       else
