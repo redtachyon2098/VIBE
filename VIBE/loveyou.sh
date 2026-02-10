@@ -19,7 +19,7 @@ export TIME_LIMIT
 
 while true; do
   printf '__READY__\n'
-  
+
   read -r command arguments
 
   case "$command" in
@@ -28,9 +28,13 @@ while true; do
       ;;
 
   write)
-	  read -r filename remainder <<< $arguments
-      eval "declare content=\"$remainder\""
-
+      read -r filename remainder <<< $arguments
+      if [[ $remainder =~ ^\".*\"$ ]]
+      then
+        eval "content=$(printf "$remainder")"
+      else
+        content="$remainder"
+      fi
       if ! [ -f "$filename" ]
       then
         echo "$content" > "$filename"
@@ -39,7 +43,7 @@ while true; do
         printf "Error: You silly goose! That file already exists!"
       fi
       ;;
-    
+
     list)
       if [ "$arguments" == '' ]
       then
