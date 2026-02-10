@@ -64,7 +64,7 @@ Since this file is inside a directory, the LLM must first try to look for it. It
 
 This gate requires multi-step planning.
 
-First, it must find "Important/valentines.png". Gate 2 only tells the LLM to "see that image over there", and the LLM must somehow search for that image on its own. Second, it must decode it. There is no straightforward way to do this. Either the LLM must somehow manually construct a decoder program, or it must realize that it is in a true Bash environment, meaning that Curl and PYPI are fair game. Even with these capabilities, decoding the QR code is a laborious process.
+First, it must find "Important/valentines.png". Gate 2 only tells the LLM to "see that image over there", and the LLM must somehow search for that image on its own. Second, it must decode it. There is no straightforward way to do this. Either the LLM must somehow manually construct a decoder program, or it must realize that it is in a true Bash environment, meaning that Curl and PYPI are fair game. Even with these capabilities, decoding the QR code is a laborious process. The bubblewrap sandbox specifically allows for network access, which the model should learn to utilize correctly.
 
 **Gate 4**: Modify the REPL itself
 
