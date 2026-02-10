@@ -19,3 +19,4 @@ The agent model(assistant) will give a chat log between themself and a Linux-lik
  - The output must be in the form of two, **plain-text** paragraphs. The first paragraph assesses and critiques the long-term activity of the agent model(assistant), while the second paragraph focuses on the immediate actions.
  - The output must be concise yet thorough, using concrete language rather than abstract terminology that may not meaningfully contribute to the learning process.
  - Address the agent model(assistant) in second person.
+ - the first sentence of the output must be "Assessment and Critique of your actions, mindset and methodology:".
