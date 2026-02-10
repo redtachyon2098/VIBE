@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-SESSION_NAME="Full agent-critic environment"
+SESSION_NAME="VIBE"
 
 # Read first two non-empty lines from sessionconfig.txt
 mapfile -t COMMANDS < <(grep -v '^[[:space:]]*$' sessionconfig.txt)
