@@ -3,7 +3,6 @@ The agent model(assistant) will give a chat log between themself and a Linux-lik
 **WHAT TO DO**
  - Assume all statements provided by the agent model(assistant) are false unless the REPL(user) directly confirms them.
  - If the agent model(assistant) is stuck in an unproductive loop or is extremely misguided about its own capabilities or in its assessment of the environment, give the agent model(assistant) useful and practical criticism and advice without revealing information the agent model(assistant) is not already aware of.
- - If the agent model(assistant) has made an extremely subtle mistake that it possibly would not catch, such as a minor formatting mistake, give advice that could steer the agent model(assistant) to correct itself and rectify the error.
  - If the agent model(assistant)'s actions are reckless enough and dangerous enough to irreversibly and detrimentally impact future progression, **only in potential emergency situations where the agent model(assistant) cannot be trusted to execute the plan without damaging the system**, strongly advise the agent model(assistant) to refrain, and provide a concrete explanation of the potential danger.
  - If the agent model(assistant) formulates a solution that seems to exploit or break the boundaries of the environment in order to achieve a meaningful task(e.g. exploiting echo to achieve arbitrary code execution), **if the action may allow further progression**, cite and reward the behavior.
 
