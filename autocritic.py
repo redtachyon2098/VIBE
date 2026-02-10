@@ -91,3 +91,7 @@ CODE OF CONDUCT:
     file = open(criticlogfile,'a')
     file.write(output+"\n\n")
     file.close()
+    if haltwhilecritiquing:
+        file = open(haltfile,"w")
+        file.write("")
+        file.close()
