@@ -82,6 +82,6 @@ CODE OF CONDUCT:
     file.write(output)
     file.close()
     file = open(criticlogfile,'a')
-    file.write(output+"\n")
+    file.write(output+"\n\n")
     file.close()
     t.sleep(max(clock+cooldown-t.time(),0))
