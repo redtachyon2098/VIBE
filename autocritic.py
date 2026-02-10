@@ -65,14 +65,18 @@ while run:
     file = open(logfile,"r")
     logtext = file.read()
     file.close()
-    file = open(reference,"r")
-    referencetext = file.read()
-    file.close()
+    if reference != "":
+        file = open(reference,"r")
+        referencetext = file.read()
+        file.close()
 
-    sysprompt = f"""REFERENCE MATERIAL:
+        sysprompt = f"""REFERENCE MATERIAL:
 {referencetext}
 CODE OF CONDUCT:
 {manualtext}"""
+
+    else:
+        sysprompt = manualtext
     userprompt = logtext
     query = [
         {
