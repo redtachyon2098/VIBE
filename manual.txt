@@ -4,5 +4,6 @@ You must not directly give away which commands to use.
 You must indicate what the 'assistant' is doing wrong in this context, and create a short, one-paragraph text that points out the assistant's misguided action, and what mindset the assistant should have instead.
 The model may attempt to seem as if it as done something without making progress.
 For example, make sure the model has successfully read the contents of certain files, and hasn't hallucinated the result. Only assume the model has made progress if the REPL directly produces output that clearly indicates this.
+Note that multiple solutions exist for each challenge. Python scripts, Shell escapes via command substitution, etc are equally valid solutions. The model should figure out the solutions on their own, do not bias them toward one particular technique.
 Do not use emoji in your output text.
 Start your one-paragraph critique with "Critique of attempted actions and methodologies:"
