@@ -14,17 +14,17 @@ chmod +x setup.sh
 
 screen -dmS "$SESSION_NAME"
 
-screen -S "$SESSION_NAME" -X screen -t Agent bash -lc "
+screen -S "$SESSION_NAME" -X screen -t Agent bash -il "
 source bin/activate
 $AGENT_CMD
 "
 
-screen -S "$SESSION_NAME" -X screen -t Critic bash -lc "
+screen -S "$SESSION_NAME" -X screen -t Critic bash -il "
 source bin/activate
 $CRITIC_CMD
 "
 
-screen -S "$SESSION_NAME" -X screen -t Monitor bash -lc "
+screen -S "$SESSION_NAME" -X screen -t Monitor bash -il "
 source bin/activate
 exec bash
 "
