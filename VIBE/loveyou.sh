@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ---- hard limits ----
-TIME_LIMIT=2          # seconds per command
+TIME_LIMIT=60          # seconds per command
 MAX_OUTPUT=20000      # bytes
 
 safe_run() {
