@@ -137,6 +137,7 @@ if __name__ == "__main__" and run:
             "--unshare-ipc",
             "--unshare-uts",
             "--share-net", #THE LLM HAS NETWORK ACCESS
+            "--ro-bind", "/etc/ssl", "/etc/ssl",
             "--ro-bind", "/etc/resolv.conf", "/etc/resolv.conf",
             "--die-with-parent",
             "bash", shell,
