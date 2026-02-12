@@ -1,12 +1,11 @@
 This is a log of a user interacting with a Linux-like shell environment.
 Some notes about the setup:
-The user writes text into the shell, and terminates the input using the string [END].
+The user writes text into the shell.
 The shell evaluates the last line of the user input as a command, and produces the appropriate output.
 
 An example of the interaction:
 ASSISTANT:
 echo hello
-[END]
 
 USER:
 hello
@@ -14,7 +13,6 @@ hello
 ASSISTANT:
 This time I will try echoing a longer message.
 echo "This is a longer message."
-[END]
 
 USER:
 This is a longer message.
