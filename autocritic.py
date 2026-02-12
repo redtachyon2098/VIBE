@@ -6,6 +6,7 @@ cooldown = 300
 manual = "manual.txt"
 admin = "control.txt"
 haltfile = "halt.txt"
+confirmfile = "haltconfirm.txt"
 reference = "README.md"
 logfile = "log.txt"
 criticlogfile = "criticlog.txt"
@@ -56,9 +57,17 @@ while run:
     print("Sleeping...")
     t.sleep(cooldown)
     if haltwhilecritiquing:
+        print("Waiting for agent halt...")
         file = open(haltfile,"w")
         file.write("Preparing critique...")
         file.close()
+        actuallyHalted = False
+        while not actuallyHalted:
+            file = open("confirmfile","r")
+            actuallyHalted = file.read().strip() != ''
+            file.close()
+            t.sleep(5)
+        print("Agent paused confirmed.")
     file = open(manual,"r")
     manualtext = file.read()
     file.close()
