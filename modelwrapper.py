@@ -13,7 +13,7 @@ def rawFromException(e: ResponseError) -> str:
 model = "gpt-oss:20b"
 window = 4096
 
-def ollamaQueryVerbose(context, stoptokens = []):
+def ollamaChat(context, stoptokens = []):
     options = {
         "num_ctx":window
     }
@@ -76,7 +76,12 @@ def ollamaContinue(context, stoptokens = ["[END]","[STOP]","SYSTEM:","USER:","AS
     else:
         return full_response
 
-promptmodel = ollamaQueryVerbose
+queryoptions = {
+    "chat": ollamaChat
+    "continue": ollamaContinue
+}
+
+promptmodel = ollamaChat
 
 if __name__ == "__main__":
     testpayload = [
