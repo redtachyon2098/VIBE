@@ -42,7 +42,7 @@ def ollamaChat(context, stoptokens = []):
     print("\n--- Ollama Response End ---\n")
     return full_response
 
-def ollamaContinue(context, stoptokens = ["[END]","[STOP]","SYSTEM:","USER:","ASSISTANT:"],strip=True):
+def ollamaContinue(context, stoptokens = ["SYSTEM:","USER:"],strip=True):
     options = {
         "num_ctx":window
     }
