@@ -77,7 +77,7 @@ def ollamaContinue(context, stoptokens = ["[END]","[STOP]","SYSTEM:","USER:","AS
         return full_response
 
 queryoptions = {
-    "chat": ollamaChat
+    "chat": ollamaChat,
     "continue": ollamaContinue
 }
 
