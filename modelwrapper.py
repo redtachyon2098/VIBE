@@ -49,6 +49,7 @@ def ollamaContinue(context, stoptokens = ["[END]","[STOP]","SYSTEM:","USER:","AS
     textprompt = ""
     for message in context:
         textprompt += f"{message['role'].upper()}:\n{message['content']}\n\n"
+    textprompt += "ASSISTANT:\n"
     print("\n--- Ollama Continuation Start ---")
     full_response = ""
     iterator = generate(model=model, prompt=textprompt, stream=True, tools=None, options=options)
