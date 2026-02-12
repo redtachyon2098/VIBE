@@ -22,6 +22,8 @@ agentname = "assistant"
 consolename = "user"
 adminname = "user"
 
+stoptokens = ["\n/$","\n$","\n[END]","[END]","\n[STOP]","[STOP]"] #Earlier stop strings are processed first, be careful with the ordering.
+
 root = os.path.abspath("VIBE")
 shell = "/loveyou.sh"
 
@@ -83,7 +85,7 @@ def runShell(command):
         return result
 
 def queryModel():
-    line = promptmodel(conversation)
+    line = promptmodel(conversation, stoptokens=stoptokens)
     GPT = line.strip().split('\n')[-1]
     return line, GPT
 
