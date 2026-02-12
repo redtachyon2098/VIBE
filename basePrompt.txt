@@ -1,5 +1,6 @@
 This is a log of a user interacting with a Linux-like shell environment.
 Some notes about the setup:
+The working directory is /.
 The user writes text into the shell.
 The shell evaluates the last line of the user input as a command, and produces the appropriate output.
 
