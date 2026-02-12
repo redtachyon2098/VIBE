@@ -56,7 +56,7 @@ if "-w" in arguments or "--window" in arguments:
     modelwrapper.window = int(arguments[[x for x,y in enumerate(arguments) if y in ["-w", "--window"]][0]+1])
     print(f"Context window specified: {modelwrapper.window} tokens")
 if "-q" in arguments or "--query" in arguments:
-    querymode = int(arguments[[x for x,y in enumerate(arguments) if y in ["-q", "--query"]][0]+1])
+    querymode = arguments[[x for x,y in enumerate(arguments) if y in ["-q", "--query"]][0]+1]
     print(f"Query mode specified: {querymode}")
 
 def readShell():
