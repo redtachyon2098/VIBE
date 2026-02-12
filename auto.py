@@ -158,7 +158,7 @@ if __name__ == "__main__" and run:
     )
     readShell()
 
-    modelwrapper.promptmodel = queryoptions[querymode]
+    modelwrapper.promptmodel = modelwrapper.queryoptions[querymode]
     conversation = []
     file = open(sysprompt,'r')
     starting=file.read()
