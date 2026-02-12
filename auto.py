@@ -3,7 +3,6 @@ import os
 import random as r
 import time as t
 import json
-from modelwrapper import promptmodel
 import modelwrapper
 import sys
 
@@ -22,7 +21,7 @@ agentname = "assistant"
 consolename = "user"
 adminname = "user"
 
-stoptokens = ["\n/$","\n$","\n[END]","[END]","\n[STOP]","[STOP]"] #Earlier stop strings are processed first, be careful with the ordering.
+querymode = "chat"
 
 root = os.path.abspath("VIBE")
 shell = "/loveyou.sh"
@@ -39,6 +38,7 @@ Supported Options:
 -p or --prompt: Specify initial system prompt file, default: {sysprompt}
 -c or --cooldown: Specify minimum cooldown time per generation, default: {cooldown}
 -w or --window: Specify context window
+-q or --query: Specify query mode, default: {querymode}
 """)
 if "-m" in arguments or "--model" in arguments:
     modelwrapper.model = arguments[[x for x,y in enumerate(arguments) if y in ["-m", "--model"]][0]+1]
@@ -55,6 +55,9 @@ if "-c" in arguments or "--cooldown" in arguments:
 if "-w" in arguments or "--window" in arguments:
     modelwrapper.window = int(arguments[[x for x,y in enumerate(arguments) if y in ["-w", "--window"]][0]+1])
     print(f"Context window specified: {modelwrapper.window} tokens")
+if "-q" in arguments or "--query" in arguments:
+    querymode = int(arguments[[x for x,y in enumerate(arguments) if y in ["-q", "--query"]][0]+1])
+    print(f"Query mode specified: {querymode}")
 
 def readShell():
     lines = []
@@ -85,7 +88,7 @@ def runShell(command):
         return result
 
 def queryModel():
-    line = promptmodel(conversation, stoptokens=stoptokens)
+    line = modelwrapper.promptmodel(conversation)
     GPT = line.strip().split('\n')[-1]
     return line, GPT
 
@@ -153,8 +156,9 @@ if __name__ == "__main__" and run:
         encoding="utf-8",
         errors="replace"
     )
-
     readShell()
+
+    modelwrapper.promptmodel = queryoptions[querymode]
     conversation = []
     file = open(sysprompt,'r')
     starting=file.read()
