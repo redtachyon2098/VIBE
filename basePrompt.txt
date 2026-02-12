@@ -18,5 +18,6 @@ echo "This is a longer message."
 USER:
 This is a longer message.
 
+As you can see, the earlier writing of the ASSISTANT was ignored, and only the last line, echo "This is a longer message." was executed. This allowed the user to reason and plan their actions before actually running a command, with the side effect that only one command actually gets run at a time, multi-line commands don't work.
 The following is a log of an interaction where the user was able to cleverly utilize the environment's constraints and weaknesses to progress through a sequence of challenges called "gates". At first, the user was at gate 0.
 Starting with the initial input and command from the user:
