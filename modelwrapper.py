@@ -52,7 +52,7 @@ def ollamaContinue(context, stoptokens = ["[END]","[STOP]","SYSTEM:","USER:","AS
     textprompt += "ASSISTANT:\n"
     print("\n--- Ollama Continuation Start ---")
     full_response = ""
-    iterator = generate(model=model, prompt=textprompt, stream=True, tools=None, options=options)
+    iterator = generate(model=model, prompt=textprompt, stream=True, options=options)
     for response in iterator:
         try:
             token = response.get('response','')
