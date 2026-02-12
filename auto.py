@@ -16,6 +16,7 @@ logfile = "log.txt"
 confile = "conversation.json"
 admin = "control.txt"
 halt = "halt.txt"
+haltconfirm = "haltconfirm.txt"
 systemname = "system"
 agentname = "assistant"
 consolename = "user"
@@ -183,10 +184,16 @@ if __name__ == "__main__" and run:
             addlog(systemname, "HALT: "+test)#HALT MESSAGE ADDED
             addConvo(systemname, "HALT: "+test)
             saveConvo()
+            file = open(haltconfirm, "w")#ACTUALLY CONFIRM THAT IS PAUSED
+            file.write(test)
+            file.close()
             while pokeHalt():
                 t.sleep(5)
             loadConvo()#YOU CAN CHANGE CONVO WHILE PAUSED
             print("Resuming...")
+            file = open(haltconfirm, "w")
+            file.write("")#CLEAR CONFIRMATION
+            file.close()
 
         file = open(admin,'r')#INTERVENTION
         intervention = file.read()
