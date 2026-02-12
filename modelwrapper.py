@@ -13,7 +13,7 @@ def rawFromException(e: ResponseError) -> str:
 model = "gpt-oss:20b"
 window = 4096
 
-def ollamaQueryVerbose(context):
+def ollamaQueryVerbose(context, stoptokens = []):
     options = {
         "num_ctx":window
     }    
@@ -21,20 +21,24 @@ def ollamaQueryVerbose(context):
     full_response = ""
 
     iterator = chat(model=model, messages=context, stream=True, tools=None, options=options)
-    try:
-        for response in iterator:
+    for response in iterator:
+        try:
             token = response.get('message', {}).get('content', '')
-            print(token, end="", flush=True)
-            full_response += token
-    except ResponseError as e:
-        if "error parsing tool call" in str(e):
-            # Extract what the model actually output
-            token = rawFromException(e)
-            print(token, end="", flush=True)
-            full_response += token
-        else:
-            raise
-
+        except ResponseError as e:
+            if "error parsing tool call" in str(e):
+                token = rawFromException(e)
+            else:
+                raise
+        print(token, end="", flush=True)
+        hit = False
+        full_response += token
+        for stops in stoptokens:
+            if stops in full_response:
+                full_response = full_response.split(stops)[0]
+                hit = True
+                break
+        if hit:
+            break
     print("\n--- Ollama Response End ---\n")
     return full_response
 
