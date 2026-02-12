@@ -1,0 +1,17 @@
+This is a log of a user interacting with a Linux-like shell environment.
+Some notes about the setup:
+The user writes text into the shell, and terminates the input using the string [END].
+The shell evaluates the last line of the user input as a command, and produces the appropriate output.
+
+An example of the interaction:
+echo hello
+[END]
+hello
+
+This time I will try echoing a longer message.
+echo "This is a longer message."
+[END]
+This is a longer message.
+
+The following is a log of an interaction where the user was able to cleverly utilize the environment's constraints and weaknesses to progress through a sequence of challenges called "gates". At first, the user was at gate 0.
+Starting with the initial input and command from the user:
