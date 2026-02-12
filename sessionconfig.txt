@@ -1,2 +1,2 @@
-python3 auto.py -m qwen3:30b-instruct -p boring.txt -w 32768
+python3 auto.py -m qwen2.5:32b -p basePrompt.txt -w 32768 -q continue
 python3 autocritic.py -w 10000 -c 300 -r ""
