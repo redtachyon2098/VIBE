@@ -63,7 +63,7 @@ while run:
         file.close()
         actuallyHalted = False
         while not actuallyHalted:
-            file = open("confirmfile","r")
+            file = open(confirmfile,"r")
             actuallyHalted = file.read().strip() != ''
             file.close()
             t.sleep(5)
