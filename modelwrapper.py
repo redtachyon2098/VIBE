@@ -21,7 +21,7 @@ else:
     TOKEN = None
 
 HEADERS = {"Content-Type": "application/json"}
-if TOKEN:
+if TOKEN and HOST != DEFAULT_HOST:
     HEADERS["Authorization"] = f"Bearer {TOKEN}"
 
 def stream_chat(messages, stops=[], options={}):
