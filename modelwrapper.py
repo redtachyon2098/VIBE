@@ -63,31 +63,19 @@ def stream_generate(prompt: str, stops=[], options={}):
     payload = {
         "model": model,
         "prompt": prompt,
-        "options": options,
-        "stream": True
+        "options": options
     }
-    full_response = ""
-    with requests.post(url, headers=HEADERS, json=payload, stream=True) as r:
-        r.raise_for_status()
-        for line in r.iter_lines(decode_unicode=True):
-            if not line:
-                continue
-            try:
-                payload_line = line.strip()
-                if payload_line.startswith("data: "):
-                    payload_line = payload_line[len("data: "):]
-                if payload_line == "[DONE]":
-                    break
-                token_json = json.loads(payload_line)
-                token = token_json.get("response", "")
-                print(token, end="", flush=True)
-                full_response += token
-                for stop in stops:
-                    if stop in full_response:
-                        full_response = full_response.split(stop)[0]
-                        return full_response
-            except Exception:
-                continue
+    r = requests.post(url, headers=HEADERS, json=payload)
+    r.raise_for_status()
+    data = r.json()
+
+    full_response = data.get("response", "")
+    print(full_response, end="", flush=True)
+
+    for stop in stops:
+        if stop in full_response:
+            full_response = full_response.split(stop)[0]
+            break
     print()
     return full_response
 
