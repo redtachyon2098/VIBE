@@ -58,24 +58,31 @@ def stream_chat(messages, stops=[], options={}):
     print()
     return full_response
 
-def stream_generate(prompt: str, stops=[], options={}):
-    url = f"{HOST}/api/generate"
-    payload = {
-        "model": model,
-        "prompt": prompt,
-        "options": options
-    }
-    r = requests.post(url, headers=HEADERS, json=payload)
-    r.raise_for_status()
-    data = r.json()
+def stream_generate(prompt: str, stops=[], options={}, chunk_size=10):
+    full_response = ""
+    current_prompt = prompt
 
-    full_response = data.get("response", "")
-    print(full_response, end="", flush=True)
-
-    for stop in stops:
-        if stop in full_response:
-            full_response = full_response.split(stop)[0]
+    while True:
+        payload = {
+            "model": model,
+            "prompt": current_prompt,
+            "options": {**options, "max_tokens": chunk_size}
+        }
+        r = requests.post(f"{HOST}/api/generate", headers=HEADERS, json=payload)
+        r.raise_for_status()
+        data = r.json()
+        chunk = data.get("response", "")
+        print(chunk, end="", flush=True)
+        full_response += chunk
+        stop_hit = False
+        for stop in stops:
+            if stop in full_response:
+                full_response = full_response.split(stop)[0]
+                stop_hit = True
+                break
+        if stop_hit or chunk.strip() == "":
             break
+        current_prompt += chunk
     print()
     return full_response
 
