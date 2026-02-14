@@ -22,6 +22,7 @@ else:
 
 HEADERS = {"Content-Type": "application/json"}
 if TOKEN and HOST != DEFAULT_HOST:
+    print(f"Modelwrapper: Remote server set to: {DEFAULT_HOST}")
     HEADERS["Authorization"] = f"Bearer {TOKEN}"
 
 def stream_chat(messages, stops=[], options={}):
