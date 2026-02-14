@@ -11,7 +11,7 @@ if os.path.isfile(REMOTE_FILE):
     with open(REMOTE_FILE, "r") as f:
         lines = f.read().splitlines()
         if len(lines) >= 2:
-            HOST = f"http://{lines[0].strip()}"
+            HOST = lines[0].strip()
             TOKEN = lines[1].strip()
         else:
             HOST = DEFAULT_HOST
@@ -22,7 +22,7 @@ else:
 
 HEADERS = {"Content-Type": "application/json"}
 if TOKEN and HOST != DEFAULT_HOST:
-    print(f"Modelwrapper: Remote server set to: {DEFAULT_HOST}")
+    print(f"Modelwrapper: Remote server set to: {HOST}")
     HEADERS["Authorization"] = f"Bearer {TOKEN}"
 
 def stream_chat(messages, stops=[], options={}):
