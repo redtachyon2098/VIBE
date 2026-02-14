@@ -98,6 +98,8 @@ My GPU isn't very good, so I couldn't try the higher-parameter models, and gener
 The real issue is that these models are quite optimized for one-shot "it all just works" sorts of tasks, which is actually detrimental to this environment. This one requires patience, multi-step action and correct capability assessment without hallucination, along with adversarial thinking.
 Some models get caught up in formatting and never even figure out how to execute commands, sticking them firmly at Gate 0. Others go through Gate 1 but cannot find the correct file for Gate 2 and try meaningless actions infinitely. Others pass Gate 2, not by active search but by intuitive brute forcing, which is a strategy I allwed for Gate 2, but that doesn't work for Gate 3, so they stagnate here. Other times they find both mission.txt and valentines.png, but give up on actually decoding the QR code. Through excessive guidance I've managed to get one instance of qwen2.5:32b to right before Gate 3, but couldn't manage the final steps. No model I've tried so far has properly solved Gate 3, let alone Gate 4.
 
+I've snapped, and rented a GPU to try running qwen2.5:72b. It consistently gets to the tail end of solving Gate 3! It doesn't quite solve Gate 3 though. This confirms my suspicion that I was actually hitting the limits of these small models.
+
 ____________________________
 
 **Additional Feature: autocritic**
