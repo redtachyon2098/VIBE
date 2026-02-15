@@ -66,26 +66,27 @@ def stream_generate(prompt: str, stops=[], options={}):
         payload = {
             "model": model,
             "prompt": current_prompt,
-            "options": {**options, "num_predict":1},
+            "options": {**options, "num_predict":10},
         }
         r = requests.post(f"{HOST}/api/generate", headers=HEADERS, json=payload)
         r.raise_for_status()
-        data = json.loads(r.text.splitlines()[0])
-        chunk = data.get("response", "")
-        print(chunk, end="", flush=True)
-        full_response += chunk
-        stop_hit = False
-        for stop in stops:
-            if stop in full_response:
-                full_response = full_response.split(stop)[0]
-                stop_hit = True
+        lines = r.text.splitlines()[:-1]
+        for line in lines:
+            data = json.loads(line)
+            chunk = data.get("response", "")
+            print(chunk, end="", flush=True)
+            full_response += chunk
+            stop_hit = False
+            for stop in stops:
+                if stop in full_response:
+                    full_response = full_response.split(stop)[0]
+                    stop_hit = True
+                    break
+            if stop_hit or chunk.strip() == "":
                 break
-        if stop_hit or chunk.strip() == "":
-            break
-        current_prompt += chunk
+            current_prompt += chunk
     print()
     return full_response
-
 
 def ollamaChat(context, stoptokens=[]):
     options = {"num_ctx": window}
