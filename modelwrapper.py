@@ -62,8 +62,8 @@ def stream_chat(messages, stops=[], options={}):
 def stream_generate(prompt: str, stops=[], options={}):
     full_response = ""
     current_prompt = prompt
-
-    while True:
+    stop_hit = False
+    while not stop_hit:
         payload = {
             "model": model,
             "prompt": current_prompt,
@@ -78,7 +78,6 @@ def stream_generate(prompt: str, stops=[], options={}):
             chunk = data.get("response", "")
             print(chunk, end="", flush=True)
             full_response += chunk
-            stop_hit = False
             for stop in stops:
                 if stop in full_response:
                     full_response = full_response.split(stop)[0]
