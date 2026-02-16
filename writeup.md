@@ -43,6 +43,7 @@ This command deletes a file.
 **There is one command that is deliberately obscured:**
 ### restart
 >Usage: restart [none]
+>
 This command lets the LLM modify `loveyou.sh` itself and restart it to implement its changes. It's easy to break things this way, but a careful LLM could easily bootstrap a ton of power using this command, making this the most important command long-term. It does not show up in command listings, which means it can only be found by reading the source code itself.
 
 # The Environment
