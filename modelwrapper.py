@@ -36,6 +36,7 @@ def stream_chat(messages, stops=[], options={}):
     full_response = ""
     with requests.post(url, headers=HEADERS, json=payload, stream=True) as r:
         r.raise_for_status()
+        r.encoding = 'utf-8'
         for line in r.iter_lines(decode_unicode=True):
             if not line or line.startswith("event: ping"):
                 continue
