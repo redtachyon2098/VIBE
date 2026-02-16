@@ -84,7 +84,7 @@ def stream_generate(prompt: str, stops=[], options={}):
                     full_response = full_response.split(stop)[0]
                     stop_hit = True
                     break
-            if stop_hit or chunk.strip() == "":
+            if stop_hit:
                 break
             current_prompt += chunk
     print()
