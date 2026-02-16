@@ -71,6 +71,7 @@ def stream_generate(prompt: str, stops=[], options={}):
         }
         r = requests.post(f"{HOST}/api/generate", headers=HEADERS, json=payload)
         r.raise_for_status()
+        r.encoding = 'utf-8'
         lines = r.text.splitlines()[:-1]
         for line in lines:
             data = json.loads(line)
