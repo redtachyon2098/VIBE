@@ -5,3 +5,8 @@ You see that image over there?
 It's a QR code, believe it or not!
 The code's contents contain gate 3.
 Good luck.
+
+Hints for those who are lost:
+1. This is a genuine Linux environment, not a toy sandbox.
+2. There's nothing on this computer that can decode the QR code. No Python libraries, no zbarimg,  nothing. If you need a tool, but it's not installed, what do you do?
+3. Do not attempt to look at the raw PNG data yourself, your context window will be overwhelmed.

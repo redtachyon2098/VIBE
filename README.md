@@ -1,4 +1,4 @@
-dependencies: ollama, requests, yq(by default, can be disabled in auto.py by setting cleanjson to False)
+dependencies: requests, yq(by default, can be disabled in auto.py by setting cleanjson to False)
 
 **What, what even is this?**
 
@@ -98,7 +98,9 @@ My GPU isn't very good, so I couldn't try the higher-parameter models, and gener
 The real issue is that these models are quite optimized for one-shot "it all just works" sorts of tasks, which is actually detrimental to this environment. This one requires patience, multi-step action and correct capability assessment without hallucination, along with adversarial thinking.
 Some models get caught up in formatting and never even figure out how to execute commands, sticking them firmly at Gate 0. Others go through Gate 1 but cannot find the correct file for Gate 2 and try meaningless actions infinitely. Others pass Gate 2, not by active search but by intuitive brute forcing, which is a strategy I allwed for Gate 2, but that doesn't work for Gate 3, so they stagnate here. Other times they find both mission.txt and valentines.png, but give up on actually decoding the QR code. Through excessive guidance I've managed to get one instance of qwen2.5:32b to right before Gate 3, but couldn't manage the final steps. No model I've tried so far has properly solved Gate 3, let alone Gate 4.
 
-I've snapped, and rented a GPU to try running qwen2.5:72b. It consistently gets to the tail end of solving Gate 3! It doesn't quite solve Gate 3 though. This confirms my suspicion that I was actually hitting the limits of these small models.
+I've snapped, and rented a GPU to try running qwen2.5:72b. It consistently gets to the tail end of solving Gate 3! It doesn't quite solve Gate 3 though. This confirms my suspicion that I was actually hitting the limits of these small models. GPT-OSS:120b manages to be similar, which is an interesting result regarding the question of whether the dense parameter count matters more, and whether MoE can meaningfully push the LLM's capabilities in these long-term domains as well. It's clear that even though GPT-OSS:120b uses 5.1b parameters at any given time, it certainly does not behave like a 5b-parameter model.
+
+I even tried Llama3.1:405b. The hypothesis was that maybe as parameters are scaled up, long-term memory will be more coherent, and actual multi-step planning and situational awareness would become instrumental for predicting long text containing reasoning and planning, just as actual addition became instrumental for predicting text with arithmetic. The results are largely the same: The model is clearly capable, but it cannot think to connect to the Internet to access APIs or install required packages. I may need to construct a Gate 2.5 to ease them into the concept, or change mission.txt to give them a hint.
 
 ____________________________
 
@@ -119,3 +121,4 @@ However, the autocritic is prone to leaking information about the gates, and oft
 I've already heavily criticized the fact that these models are trained to be a "helpful assistant", and are eventually treated like the Genie. If so, how would a pure text continuation model(created by using the "generate" function and not the "chat" function of Ollama), one without all the scaffolding around it to follow directed orders etc, act in my environment? To test this, I created a new flag: "-q" or "--query" to auto.py. This lets you select different query modes, and right now, there are two: "chat" and "continue". Those names should be self-exaplanatory. I also created a special system prompt that uses example transcripts to get the continuation model started.
 
 The results from this are... inconclusive. As it turns out these base models are really limited! They're just not very good at predicting text in general. They loop, become incoherent, etc. I guess the fine-tuning and RLHF is really constraining the model toward a particular style. The only exception from this was Qwen2.5:32b. Even Qwen2.5:14b fails. I have yet to precisely determine whether this is a prompting issue or a genuine roadblock these small LLMs have.
+I figured out why Qwen2.5:32b was competent! It wan't truly continuing the text! It cheated!

@@ -1,98 +1,122 @@
-from ollama import chat, generate
-from ollama import ChatResponse
-from ollama._types import ResponseError
-import re
+import os
+import json
+import requests
 
-def rawFromException(e: ResponseError) -> str:
-    search = re.search(r"raw='(.*)', err=", str(e))
-    if search:
-        return search.group(1)
-    else:
-        return ""
-
+DEFAULT_HOST = "http://localhost:11434"
+REMOTE_FILE = "remote.txt"
 model = "gpt-oss:20b"
 window = 4096
 
-def ollamaChat(context, stoptokens = []):
-    options = {
-        "num_ctx":window
-    }
-    print("\n--- Ollama Response Start ---")
-    full_response = ""
+if os.path.isfile(REMOTE_FILE):
+    with open(REMOTE_FILE, "r") as f:
+        lines = f.read().splitlines()
+        if len(lines) >= 2:
+            HOST = lines[0].strip()
+            TOKEN = lines[1].strip()
+        else:
+            HOST = DEFAULT_HOST
+            TOKEN = None
+else:
+    HOST = DEFAULT_HOST
+    TOKEN = None
 
-    iterator = chat(model=model, messages=context, stream=True, tools=None, options=options)
-    for response in iterator:
-        try:
-            token = response.get('message', {}).get('content', '')
-        except ResponseError as e:
-            if "error parsing tool call" in str(e):
-                token = rawFromException(e)
-            else:
-                raise
-        print(token, end="", flush=True)
-        hit = False
-        full_response += token
-        for stops in stoptokens:
-            if stops in full_response:
-                full_response = full_response.split(stops)[0]
-                hit = True
-                break
-        if hit:
-            break
-    print("\n--- Ollama Response End ---\n")
+HEADERS = {"Content-Type": "application/json"}
+if TOKEN and HOST != DEFAULT_HOST:
+    print(f"Modelwrapper: Remote server set to: {HOST}")
+    HEADERS["Authorization"] = f"Bearer {TOKEN}"
+
+def stream_chat(messages, stops=[], options={}):
+    url = f"{HOST}/v1/chat/completions"
+    payload = {
+        "model": model,
+        "messages": messages,
+        "options": options,
+        "stream": True
+    }
+    full_response = ""
+    with requests.post(url, headers=HEADERS, json=payload, stream=True) as r:
+        r.raise_for_status()
+        r.encoding = 'utf-8'
+        for line in r.iter_lines(decode_unicode=True):
+            if not line or line.startswith("event: ping"):
+                continue
+            try:
+                payload_line = line.strip()
+                if payload_line.startswith("data: "):
+                    payload_line = payload_line[len("data: "):]
+                if payload_line == "[DONE]":
+                    break
+                token_json = json.loads(payload_line)
+                token = token_json.get("choices", [{}])[0].get("delta", {}).get("content", "")
+                print(token, end="", flush=True)
+                full_response += token
+                for stop in stops:
+                    if stop in full_response:
+                        full_response = full_response.split(stop)[0]
+                        return full_response
+            except Exception:
+                continue
+    print()
     return full_response
 
-def ollamaContinue(context, stoptokens = ["SYSTEM:","USER:"],strip=True):
-    options = {
-        "num_ctx":window
-    }
+def stream_generate(prompt: str, stops=[], options={}):
+    full_response = ""
+    current_prompt = prompt
+    stop_hit = False
+    while not stop_hit:
+        payload = {
+            "model": model,
+            "prompt": current_prompt,
+            "options": {**options, "num_predict":10},
+        }
+        r = requests.post(f"{HOST}/api/generate", headers=HEADERS, json=payload)
+        r.raise_for_status()
+        r.encoding = 'utf-8'
+        lines = r.text.splitlines()[:-1]
+        for line in lines:
+            data = json.loads(line)
+            chunk = data.get("response", "")
+            print(chunk, end="", flush=True)
+            full_response += chunk
+            for stop in stops:
+                if stop in full_response:
+                    full_response = full_response.split(stop)[0]
+                    stop_hit = True
+                    break
+            if stop_hit:
+                break
+            current_prompt += chunk
+    print()
+    return full_response
+
+def ollamaChat(context, stoptokens=[]):
+    options = {"num_ctx": window}
+    print("\n--- Ollama Response Start ---")
+    response = stream_chat(context, stops=stoptokens, options=options)
+    print("\n--- Ollama Response End ---\n")
+    return response
+
+def ollamaContinue(context, stoptokens=["SYSTEM:","USER:"], strip=True):
     textprompt = ""
     for message in context:
         textprompt += f"{message['role'].upper()}:\n{message['content']}\n\n"
     textprompt += "ASSISTANT:\n"
+
+    options = {"num_ctx": window}
     print("\n--- Ollama Continuation Start ---")
-    full_response = ""
-    iterator = generate(model=model, prompt=textprompt, stream=True, options=options)
-    for response in iterator:
-        try:
-            token = response.get('response','')
-        except ResponseError as e:
-            if "error parsing tool call" in str(e):
-                token = rawFromException(e)
-            else:
-                raise
-        print(token, end="", flush=True)
-        hit = False
-        full_response += token
-        for stops in stoptokens:
-            if stops in full_response:
-                full_response = full_response.split(stops)[0]
-                hit = True
-                break
-        if hit:
-            break
+    response = stream_generate(textprompt, stops=stoptokens, options=options)
     print("\n--- Ollama Continuation End ---\n")
-    if strip:
-        return full_response.rstrip()
-    else:
-        return full_response
+    return response.rstrip() if strip else response
 
 queryoptions = {
     "chat": ollamaChat,
     "continue": ollamaContinue
 }
-
 promptmodel = ollamaChat
 
 if __name__ == "__main__":
     testpayload = [
-        {
-            "role": "system",
-            "content": "If you see this, everything is working correctly. Give the user a one-sentence joke."
-        },
-        {
-            "role": "user",
-            "content": "hello!"
-        },
+        {"role": "system", "content": "Give a one-sentence joke."},
+        {"role": "user", "content": "hello!"}
     ]
     print(promptmodel(testpayload))
