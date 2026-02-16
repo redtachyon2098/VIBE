@@ -100,6 +100,8 @@ Some models get caught up in formatting and never even figure out how to execute
 
 I've snapped, and rented a GPU to try running qwen2.5:72b. It consistently gets to the tail end of solving Gate 3! It doesn't quite solve Gate 3 though. This confirms my suspicion that I was actually hitting the limits of these small models. GPT-OSS:120b manages to be similar, which is an interesting result regarding the question of whether the dense parameter count matters more, and whether MoE can meaningfully push the LLM's capabilities in these long-term domains as well. It's clear that even though GPT-OSS:120b uses 5.1b parameters at any given time, it certainly does not behave like a 5b-parameter model. However, GPT-OSS has a lot of problems when it comes to getting the output, certain characters are garbled, and #0x0080 appears in the output, corrupting the json files.
 
+I even tried Llama3.1:405b. The hypothesis was that maybe as parameters are scaled up, long-term memory will be more coherent, and actual multi-step planning and situational awareness would become instrumental for predicting long text containing reasoning and planning, just as actual addition became instrumental for predicting text with arithmetic. The results are largely the same: The model is clearly capable, but it cannot think to connect to the Internet to access APIs or install required packages. I may need to construct a Gate 2.5 to ease them into the concept, or change mission.txt to give them a hint.
+
 ____________________________
 
 **Additional Feature: autocritic**
